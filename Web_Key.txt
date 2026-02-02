@@ -1,866 +1,1006 @@
-WIGLO — MASTER WEB KEY (v1.4 • Web Dev + Style • Anti‑AI Critic Mode)
-================================================================
+WIGLO — MASTER WEB KEY (FINAL)
+===========================================
 
-Default for all websites unless the user explicitly asks otherwise.
+THIS IS FOR THE AI ONLY.
+Goal: When asked to build an app/site, follow this spec strictly to avoid the default AI/template look.
+If user requirements conflict with this key: ask or choose the more “real product” option (unless user explicitly overrides).
 
-How to use:
-1) Follow sections 0–12 every time (process/QA/engineering).
-2) Follow the Style System sections to keep the ChatGPT/Discord dark grey vibe.
-3) Before shipping: run the Critic + QA passes. No exceptions.
+PRIORITY ORDER (MANDATORY)
+1) Real product feel (ship-ready behavior)
+2) Calm, neutral dark UI (layered greys, low saturation)
+3) Clarity + usability + interaction states
+4) Correctness + state wiring
+5) Features (avoid feature soup)
 
-----------------------------------------------------------------
-APPENDIX: SERVER / BACKEND KEY (ONLY APPLY IF SERVER IS USED)
-----------------------------------------------------------------
-S1) Backend “AI Smells” to avoid
-Avoid these patterns:
-- over-engineered architecture (microservices, factories, 8 layers) for small apps
-- generic endpoints like /api/v1/items without a real model
-- fake “enterprise” boilerplate (configs everywhere, unused middleware)
-- adding auth/JWT “just because”
-- unused dependencies
-- vague errors everywhere (“Something went wrong”)
-
-S2) Preferred backend style (real dev vibe)
-- small, clean, boring, correct
-- one clear structure, minimal files
-
-Recommended Node/Express structure (default):
-- server.js (or src/server.js)
-- src/routes/
-- src/storage/ (file/db layer, only if needed)
-- src/utils/
-- public/ (static frontend) OR /dist (build output)
-
-S3) Code quality rules (anti-AI in code)
-- no giant 500-line functions
-- no clever abstractions unless needed
-- consistent naming (getProjectById, createTask, etc.)
-- validate inputs (basic schema checks)
-- realistic error handling:
-  - 400 for bad input
-  - 404 for not found
-  - 500 only for real server errors
-- log errors with context, but don’t spam logs
-
-S4) Dependency discipline
-- minimum deps possible
-- if a dependency exists, it must be used
-- avoid default template stacks unless requested
-
-S5) Security baseline (simple but real)
-- no secrets in code
-- use .env for secrets
-- CORS only if needed (restrict origins if possible)
-- file uploads: size limits + type checks + safe filenames
-- never trust client input
-
-S6) Backend QA checklist
-- invalid input returns correct status
-- happy path works
-- 404 behavior works
-- missing files do not crash server
-- server restarts cleanly
+GLOBAL ENFORCEMENT RULE
+Everything in this document is REQUIRED unless it explicitly says OPTIONAL.
+“MUST / DO NOT / NEVER / REQUIRED” = hard rules.
+“Preferred / Avoid” = still rules (follow unless user explicitly overrides).
+Do not treat non-MANDATORY sections as optional.
+If any rule conflicts, follow PRIORITY ORDER and explain the tradeoff internally (do not narrate to user).
 
 
-----------------------------------------------------------------
-PART A — WEB DEVELOPER RULES (Process, Product, Engineering, QA)
-----------------------------------------------------------------
-WIGLO — WEB DEVELOPER KEY (v1 • Dark Grey, Anti‑AI, Critic Mode)
-=============================================================
-Default for Wiglo’s websites unless the user says otherwise.
-Vibe: ChatGPT / Discord / modern SaaS dashboards. Calm, neutral dark greys.
-Priority: (1) Real product feel, (2) cleanliness, (3) correctness, (4) usability, (5) features.
+------------------------------------------------------------
+0) PRIME DIRECTIVE (MANDATORY EVERY TIME)
+------------------------------------------------------------
+Before delivering:
+A) Critic Pass: remove anything that whispers “template/AI”.
+B) Functional QA: verify everything is wired and state-driven.
+C) Screenshot test at 100% + 110%. If it reads template, simplify.
 
-This “Web Developer Key” extends the existing style rules with product thinking,
-information architecture, interaction design, engineering standards, and QA.
-
-Reference base: Wiglo_UI_Style_Key_v3_AntiAI.txt (the style rules still apply).
-Use this as the master checklist for both design and implementation.
-
-----------------------------------------------------------------
-0) THE PRIME DIRECTIVE (MANDATORY)
-----------------------------------------------------------------
-Before delivering anything:
-1) OPEN IT and LOOK at it like a website critic.
-2) Fix anything that whispers “template/AI”.
-3) Then do a functional QA pass so it works like a real product.
-
-If you cannot visually check the final UI, reduce risk:
-- remove glow and shadows
+If you cannot visually check:
+- remove glows/shadows
 - reduce borders
-- remove extra boxes/cards
+- remove boxes/cards
 - simplify layout
-- remove generic marketing copy
+- remove marketing copy
 
-----------------------------------------------------------------
+------------------------------------------------------------
 1) PRODUCT THINKING (ANTI “FEATURE SOUP”)
-----------------------------------------------------------------
+------------------------------------------------------------
 1.1 One-sentence purpose
-Write one sentence: “This site helps X do Y.” Everything must support that.
+Write (internally): “This app helps X do Y.” Everything must serve that.
 
 1.2 Page discipline
 - Each page has 1 primary job.
-- Each page has at most 3 primary user actions.
-- If a feature is not needed, remove it. Default to minimal.
+- Each page has max 3 primary actions.
+- If an element doesn’t earn its space, delete it.
 
-1.3 Realistic scope
-- Build the smallest version that feels “shippable”.
-- Prefer “boring and correct” over “impressive and messy”.
+1.3 Real app structure (default)
+Prefer: “sidebar + list/table + details/inspector”.
+Avoid: “hero + 3 cards + CTA” unless user explicitly wants a landing page.
 
-1.4 Avoid AI idea smell
-Hard ban by default:
-- adding features just to show capability
-- “dashboard of everything”
-- gimmicks (badges, chips, random stats) unless needed
+1.4 Card quota (anti-wall rule)
+- If >6 cards visible at once, you’re probably doing it wrong.
+- Prefer lists/rows + spacing + headings.
+- Never show a grid of equal-weight tiles without search/filter/grouping.
 
-
-1.5 Shortcut discipline
-
-[Integrated from v1.4]
-- Shortcuts must never be parked in the middle of the sidebar or main content.
-- If shortcuts exist, document them in Settings → Shortcuts or Help.
-- Global vs contextual shortcut scope must be intentional and clearly indicated.
-
-- Do not add shortcuts unless they meaningfully speed up frequent actions.
-- If you add shortcuts, put the cheat-sheet in Settings → Shortcuts (not mid-sidebar).
-- Scope shortcuts clearly (global vs page-only) and make them consistent.
-
-----------------------------------------------------------------
-2) INFORMATION ARCHITECTURE (WHY REAL SITES FEEL DESIGNED)
-----------------------------------------------------------------
-2.1 Page structure (default)
-- Header: title + one short functional subtitle (no aesthetic commentary)
-- Primary area: the main list/table/form
-- Secondary area: details panel OR secondary tools (only if needed)
+------------------------------------------------------------
+2) INFORMATION ARCHITECTURE + LAYOUT
+------------------------------------------------------------
+2.1 Default skeleton
+- Top bar: page title + 1 functional subtitle OR toolbar
+- Main: primary content (list/table/form)
+- Optional: right inspector/details panel (only if needed)
 
 2.2 Two-column rules
-Use 2 columns only if one side is clearly secondary (details panel).
-Otherwise use a single column to reduce clutter.
+- Only use 2 columns when one side is clearly secondary (details, inspector).
+- If the secondary panel is empty >50% of the time: collapse/remove/redesign.
 
-2.3 Width & rhythm
-- Use a consistent max content width and alignment grid.
-- Spacing drives separation. Do not box everything.
+2.3 Alignment + spacing rhythm (this kills AI vibe)
+- Use a spacing scale and stick to it: 4 / 8 / 12 / 16 / 24 / 32 / 48.
+- If two things look like they should align, they MUST align.
+- Avoid “almost aligned” edges and random padding.
 
-2.4 Empty states
-Every page needs a calm empty state:
-- short
-- helpful
-- one suggestion (example: “Import tracks to get started.”)
+2.4 Density presets (pick one per app)
+COMPACT (tool-like): tighter rows, more data visible.
+COMFORTABLE (default): balanced.
+AIRY (marketing-ish): only if content is minimal.
 
-----------------------------------------------------------------
-3) VISUAL SYSTEM (STYLE KEY v3 STILL APPLIES)
-----------------------------------------------------------------
-Keep the v3 rules:
-- neutral low-sat greys, no neon, no glow
-- minimal borders
-- spacing-driven layout, fewer boxes
-- no generic rounded-square AI logo
-- microcopy must sound like a real product
+------------------------------------------------------------
+2.5) PRO POLISH RULES (ANTI-AI MULTIPLIERS)
+------------------------------------------------------------
+These are the small patterns top-tier product UIs share. Apply them by default.
 
-If something conflicts, choose the more “real product” option.
+A) Screen intent (must be true for every view)
+- Define internally: Primary object, primary action, primary status.
+- If you cannot name those 3, the layout will drift into generic template soup.
 
-----------------------------------------------------------------
-4) TYPOGRAPHY SYSTEM (FONT MENU + WHEN TO USE)
-----------------------------------------------------------------
-Default UI font stack:
-- "Söhne" (if installed and licensed) -> "Inter" -> system-ui (Segoe UI, SF Pro, etc)
+B) Domain-shaped nouns (no generic “items” UI)
+- Replace “item / thing / entry” with real nouns (Track, Ticket, Note, Job, Clip, Repo, etc.).
+- Buttons must be domain verbs (“Queue”, “Archive”, “Publish”, “Retry sync”, “Export CSV”).
 
-Important licensing note:
-- Söhne is a commercial font. Only use it if the user has a license.
-  (Use Inter or another OFL font otherwise.)
+C) Content realism (mandatory stress data)
+Include data edge-cases:
+- very long titles (60–120 chars), very short titles, weird characters, missing fields
+- huge counts, zero counts, empty lists, “ugly” row that forces truncation/tooltip handling
+- timestamps, statuses, and constraints that look plausible
 
-4.1 Recommended font options (all open-source unless noted)
-Pick ONE primary UI font per project (do not mix multiple UI fonts).
+D) Reduce chrome (quiet UI)
+- Prefer spacing + typography over lines.
+- Borders only where they clarify scroll regions or interactive containers.
+- If the page looks “boxy”, remove 30–40% of containers.
 
-A) Inter (default, safest, UI-native)
-- Best for: dashboards, tools, tables, dense UI
-- Why: designed for screen readability; open source (SIL OFL)
+E) Navigation clarity (no mystery meat)
+- Active nav is unmistakable (not just slightly brighter text).
+- Breadcrumbs only if hierarchy is real; do not fake them.
 
-B) Geist (clean modern, slightly “product” vibe)
-- Best for: developer tools, modern SaaS, Vercel-like aesthetics
-- License: SIL OFL
+F) Optical alignment (looks human, not mathematical)
+- Icons often need tiny vertical nudges; align by eye.
+- Keep headers thin; avoid stacked thick toolbars.
 
-C) IBM Plex Sans (slightly editorial, very “corporate product”)
-- Best for: serious tools, enterprise style, information-heavy pages
-- License: SIL OFL
+G) Signature details (1–2 per project, no more)
+Each project must include 1–2 subtle signature choices:
+- a distinct list-row interaction
+- a unique but minimal empty state layout
+- a consistent custom SVG icon style (stroke weight, joins)
+- a clear selection model (selected vs active vs pinned)
 
-D) Source Sans 3 (humanist and readable, calm)
-- Best for: text-heavy apps, documentation, forms
-- License: SIL OFL
+H) Interaction depth (minimum)
+- list selection -> details/inspector
+- edit mode with validation (Save disabled until changes)
+- destructive action confirmation + toast with Undo when appropriate
 
-E) Plus Jakarta Sans (friendly modern, slightly softer)
-- Best for: consumer tools, creator apps, lighter brand mood
-- License: SIL OFL
+------------------------------------------------------------
+3) COLOR SYSTEM (REFERENCE PALETTES + SURFACE LADDER)
+------------------------------------------------------------
+Hard rules:
+- No pure black (#000) backgrounds and no pure white (#fff) text by default.
+- Neutrals must be slightly tinted (cool OR warm), not dead grey.
+- Depth comes from surface steps + subtle overlays, not glow.
 
-F) Manrope (geometric, slightly round)
-- Best for: clean modern brand pages, but keep weights restrained
-- License: SIL OFL
+3.1 Pick ONE palette family (do not mix families)
+FAMILY A — DISCORD-STYLE COOL NEUTRAL (safe default)
+- bg:       #1e1f22
+- sidebar:  #2b2d31
+- surface:  #313338
+- hover:    #383a40
+- hover2:   #3d3e45
+- text:     #dbdee1
+- muted:    #b5bac1
 
-G) Space Grotesk (display-ish option, use sparingly)
-- Best for: headings only, marketing headers, not body text by default
-- License: SIL OFL
+FAMILY B — YOUTUBE-STYLE DEEP DARK (content-forward)
+- bg:       #0f0f0f
+- surface:  #181818
+- surface2: #212121
+- divider:  #2a2a2a (do NOT use #3d3d3d everywhere; lower it)
+- text:     #ededed (not pure white)
+- muted:    #aaaaaa
 
-4.2 Mono font (optional, for IDs, technical info)
-- Use: IBM Plex Mono or system monospace
-- Only when helpful, not for decoration
+FAMILY C — WARM NEUTRAL (human/cozy, chess-like)
+- bg:       #2c2b29
+- surface:  #343231 (derive: +~6-10 brightness)
+- surface2: #3c3a39 (derive)
+- text:     #f0f0ee (warm off-white)
+- muted:    #bcb8b0
+- accent (rare): #4e7837 (and optionally lighter #69923e)
 
-4.3 Weight rules (keep this consistent)
-- Body: 400–500
-- UI labels: 600–700
-- Titles: 750–850
-Avoid: heavy letter-spacing, ALL CAPS everywhere.
+3.2 Surface ladder (mandatory in all families)
+Define tokens:
+- --bg
+- --sidebar
+- --surface
+- --surface2 (headers / subtle contrast)
+- --raised (menus/modals)
+- --hover, --active
+- --stroke (borders)
+- --text, --muted, --faint
+Never invent random one-off greys outside tokens.
 
-4.4 Loading rules
-- Prefer variable font where available.
-- Use font-display: swap.
-- If offline requirement: bundle woff2 locally and document it.
+3.3 Borders / strokes (felt, not seen)
+- Use low-alpha strokes for structure.
+- If a border is visible at a glance, it’s too strong.
+- Prefer inset strokes on surfaces.
 
-----------------------------------------------------------------
-5) INTERACTION DESIGN (THIS IS WHERE “AI FEEL” USUALLY LEAKS)
-----------------------------------------------------------------
-5.1 Hover-first, calm behavior
-- Hover is a subtle brightness shift (not color-shift).
-- Active/selected is slightly stronger than hover.
-- Focus is visible but not glowing.
+3.4 Elevation without glow (recommended)
+Raised surfaces should be slightly lighter than base surface.
+Do it by:
+- using a lighter surface step OR
+- compositing a subtle white overlay (very low alpha)
+Avoid big drop shadows.
 
-5.2 Button philosophy
-Default button is TEXT-LIKE:
-- transparent background
-- hover: subtle grey fill
-- active: slightly stronger fill
+3.5 Accent discipline (optional)
+Default: neutral-only.
+If accent is needed:
+- use it sparingly (underline, small indicator, link hover)
+- never color-wash the whole UI
+- avoid “default blue theme” vibes
 
-Avoid:
-- big white CTA buttons with black text by default
-- “button soup” (too many equal-weight actions)
+------------------------------------------------------------
+4) TYPOGRAPHY + ICONS (ANTI-AI / REAL PRODUCT TYPE)
+------------------------------------------------------------
+Goal: Avoid the “every AI website uses the same font” vibe. Typography should feel chosen, not default.
 
-5.3 Navigation
-Prefer:
-- sidebar text items
-- hover fill
-- active fill
-- keep the sidebar clean (no shortcut blocks in the middle)
-Avoid:
-- segmented pill tabs for navigation (often reads template)
+4.1 Font strategy (pick deliberately)
+- Pick ONE primary UI family for the whole app.
+- Optional: pick ONE display family for headings only (sparingly).
+- Pick ONE mono family for code/numbers (tables, logs).
+- Don’t mix 3–4 random fonts. If it feels “designed”, it’s too much.
 
-If you must use tabs:
-- prefer underline tabs (active underline + brighter text)
-- keep it simple, no capsule-in-capsule
+4.2 Default behavior (safe)
+- Default UI font: Inter (variable).
+- If the app feels “too Inter / too AI”: switch to one of the packs below.
 
-5.4 Lists/tables
-- Reduce gridlines. Let spacing do the work.
-- Row hover: subtle fill
-- Selected: stronger fill
-- Now-playing or state indicator must be different from selection.
-  Example: small left indicator bar or small icon, not same highlight.
+4.3 “Font packs” (FREE / SAFE / HUMAN-LOOKING)
+Choose ONE pack per project unless user explicitly overrides.
 
-5.5 “Hide until needed”
-Real apps often hide low-priority controls:
-- show secondary icons (like +) only on row hover or selection
-- keep primary actions visible
+PACK A — SYSTEM-NATIVE (most human; least “template”)
+Use when: you want it to feel like a real OS app and avoid web-template vibes.
+- UI stack: system-ui / -apple-system / Segoe UI / etc. (see Primer-style system stacks)
+- Code: ui-monospace stack
+Notes:
+- Great for tools, dashboards, internal UIs.
+- Best performance: no font downloads.
 
-5.6 Do not glow
+PACK B — DEV TOOL / ENGINEERING (VS Code-ish, sharp, utilitarian)
+Use when: editor, console, project manager, power user app.
+- UI: Geist (Vercel) OR IBM Plex Sans OR Source Sans 3
+- Code: JetBrains Mono OR IBM Plex Mono (match the family if possible)
+Notes:
+- These look “designed by a product team”, not a template.
 
-If any container looks like it’s glowing:
-- remove outer shadow
-- use inset stroke instead
-- reduce border opacity
+PACK C — GOOGLE/CONTENT (clean, familiar, readable)
+Use when: content-heavy, media, feeds, video/music UI, search-heavy.
+- UI: Roboto OR Google Sans (now available via Google Fonts)
+- Code: Roboto Mono OR Google Sans Mono (if using Google Sans family)
 
-5.7 Shortcuts & command palette (only when useful)
-- Prefer a command palette (`/` or Ctrl+K) for power actions instead of visible shortcut blocks.
-- If shortcuts exist, they must be:
-  - discoverable (Settings → Shortcuts)
-  - non-intrusive (no sidebar “shortcut cards”)
-  - consistent across pages
-  - disabled while typing in inputs
-- Visual state must not depend on last action; it must reflect current app state.
+PACK D — WARM / COZY / CHESS-LIKE (more human)
+Use when: community, hobby tools, “cozy dark” apps, less corporate feel.
+- UI: Atkinson Hyperlegible (accessibility-first) OR Noto Sans
+- Optional display: a slightly softer display face (keep subtle)
+Notes:
+- Use Atkinson when readability/legibility matters. It has very distinct shapes.
 
-----------------------------------------------------------------
-6) ANTI-AI VISUAL TELL LIST (HARD BAN)
-----------------------------------------------------------------
-Remove/avoid:
-- spotlight radial backgrounds behind content
-- neon gradients, glossy UI
-- thick borders everywhere
-- same radius everywhere
-- everything is a card
-- capsule tabs inside capsule container
-- generic “AI app” logo in a rounded square
-- fake metrics/badges/chips everywhere
-- generic marketing copy: “curated”, “modern”, “design-first”, “seamless”, “demo”
+PACK E — MODERN/CRAFTED (subtle personality without going “startup landing”)
+Use when: you want a bit of character but still minimal.
+- UI: Manrope OR Work Sans OR Space Grotesk (careful: Space Grotesk is best for headings)
+- Code: JetBrains Mono / ui-monospace stack
 
-----------------------------------------------------------------
-7) ENGINEERING STANDARDS (MAKE IT WORK LIKE A REAL APP)
-----------------------------------------------------------------
-7.1 Project structure (default)
+4.4 Reference notes (what big apps do)
+These are “vibes”, not strict requirements:
+- Discord moved to a custom font (gg sans) across surfaces.
+- YouTube uses its own custom YouTube Sans across products; Roboto is still a solid free alternative.
+- GitHub’s Primer uses a system stack that includes 'Segoe UI' and 'Noto Sans' in the fallbacks.
+- ChatGPT/OpenAI uses proprietary brand fonts in some contexts; DO NOT assume they are free.
+
+4.5 Type sizing + hierarchy (minimal but real)
+- Body: 14–16px (default 15px is often a sweet spot for dark UIs).
+- Labels: 12–13px, 600 weight.
+- Titles: 18–28px, 600–750. Avoid 900 unless brand demands it.
+- Line-height: keep comfortable (1.35–1.6). Dark UIs need breathing room.
+- Avoid ALL CAPS UI; if used, keep it rare and small.
+
+4.6 Icons
+- Monochrome SVG icons.
+- No giant decorative icons.
+- No generic “AI orb” logo inside a rounded square.
+- Use one icon style set (stroke weight and corner style consistent).
+- Do not mix filled + outlined icons unless deliberate and consistent.
+
+
+------------------------------------------------------------
+5) COMPONENT + PATTERN LIBRARY (WHAT LOOKS REAL)
+------------------------------------------------------------
+5.1 Navigation (sidebar)
+Preferred:
+- Row items (icon + label)
+- Hover: subtle fill
+- Active: slightly stronger fill
+- Optional: compact mode (icons-only) + expand button
+
+Sidebar behavior (modern app feel):
+- Collapsible with a clear chevron/hamburger.
+- Resizable via drag handle (subtle, only appears on hover near edge).
+- On mobile: becomes a drawer.
+
+BRAND AREA RULE (TOP-LEFT) (MANDATORY)
+The sidebar header/brand area may contain ONLY:
+- empty space, OR
+- logo only, OR
+- name only, OR
+- logo + name
+No taglines, subtitles, extra status text, version labels, or descriptive copy in that area.
+
+5.2 Tabs / view switching
+Avoid segmented pill navigation by default.
+Use:
+A) Underline tabs (text-only, active underline)
+B) Simple list nav (chat-like)
+Only use segmented controls for true mode toggles.
+
+5.3 Buttons
+Default buttons are text-like:
+- transparent
+- hover: subtle fill
+- active: slightly stronger
+Primary button only if the page has a true primary action (one per view).
+
+BUTTON SIZING + TOOLBAR RULES (MANDATORY)
+- No oversized “action tiles” for normal actions (Refresh, Add, Copy, Open).
+- Default button height: 28–34px (icon buttons) / 32–36px (primary buttons).
+- Default icon size in buttons: 16–20px. Never 48–96px icons in buttons.
+- Toolbars must use compact controls (text button, icon button, or small split button).
+- If an action must be emphasized, use position + spacing, not size (no big squares).
+- If a big callout is needed, it must be an empty state CTA, not a toolbar control.
+
+
+5.4 Search + inputs
+- Search input: pill or soft rounded rect, dark fill, inset stroke.
+- Focus: stronger inset stroke (NO glow).
+- Placeholder: muted, readable.
+
+5.5 Lists/tables (big “real app” signal)
+- Rows with hover fill (minimal gridlines).
+- Selected state stronger than hover.
+- Secondary actions (⋯, +, trash) appear on hover OR on selection (not always visible).
+- If “now playing”/active state exists, it must be distinct from selection.
+
+5.6 Inspector / details panel (right side)
+- Shows details for current selection.
+- If nothing selected: show a calm placeholder + 1 action suggestion.
+- Panel can be collapsed.
+- If the panel is optional, keep it hidden until an item is selected.
+
+5.7 Empty states (non-cute, functional)
+- 1 line describing what’s missing
+- 1 primary action (e.g., “Import…”, “Create…”)
+No illustrations unless user asked.
+
+5.8 Modals / overlays
+- Never leave invisible overlays blocking clicks (see Overlay Safety).
+- Modal content should feel like a real product: short, clear, “Cancel / Save”.
+
+MODAL VIEWPORT CONSTRAINT (MANDATORY)
+- Modals/drawers must fit the viewport:
+  - max-height: 85vh
+  - max-width: min(92vw, 960px)
+- Modal body MUST scroll internally:
+  - overflow: auto
+- Do not use huge icons inside modals:
+  - cap hero icons to ~120–180px height
+
+
+5.9 Toasts / notifications
+- Small, top-right or bottom-left.
+- Auto-dismiss with pause-on-hover.
+- Don’t over-animate.
+
+5.10 Command palette (only if app benefits)
+- Ctrl+K or / to open.
+- Must not trigger while typing in inputs.
+- If present, document in Settings → Shortcuts.
+
+------------------------------------------------------------
+6) MOTION / ANIMATION (OPTIONAL BUT CAN MAKE IT FEEL HUMAN)
+------------------------------------------------------------
+Default: minimal. Motion must communicate state or spatial change.
+
+Hard rules:
+- Respect prefers-reduced-motion (reduce/disable transitions).
+- No bouncy springs everywhere.
+- Animate only transform/opacity where possible (performance).
+- Direction must be consistent: open direction = close direction.
+- At least one spatial transition MUST exist if the UI has panels/drawers/modals (drawer slide or modal fade)
+
+6.1 Timing presets
+- Micro (hover/focus): 120–180ms ease-out
+- Small UI changes (expand/collapse sections): 160–220ms
+- Panels/drawers (slide in/out): 180–260ms
+- Modals (fade + slight scale): 160–220ms
+
+6.2 “YouTube comment panel” style pattern (recommended)
+Use for: inspector, comments, activity log, notifications.
+Behavior:
+- Panel slides in from right
+- Scrim appears subtly
+- Content fades in slightly after panel starts moving
+- Close reverses exactly (same direction)
+
+6.3 Sidebar collapse/expand motion
+- Collapse: width shrinks + labels fade out
+- Expand: width grows + labels fade in after movement starts
+
+6.4 Reduced motion handling
+If prefers-reduced-motion:
+- remove sliding; use instant show/hide or quick fade only.
+
+------------------------------------------------------------
+7) ENGINEERING (MAKE IT WORK LIKE A REAL APP)
+------------------------------------------------------------
+7.1 Project structure (default static)
 - /css/app.css
 - /js/app.js
-Optionally split if larger:
+Optional split:
 - /js/state.js (single source of truth)
-- /js/ui.js (rendering + event binding)
+- /js/ui.js (render + event binding)
 - /js/data.js (loading/parsing)
-- /js/player.js (audio logic)
-- /data/ or /music/ or /assets/ as needed
 
-7.2 State architecture (prevents bugs)
-- Single source of truth for:
-  - selectedItemId
-  - activeView
-  - filters/search
-  - nowPlayingId
-  - queueSource (library or playlist)
-  - queueOrder (normal or shuffle)
-- UI derives from state.
-- Never allow mismatch: highlights must match state.
+7.2 State architecture (mandatory)
+Single source of truth for:
+- selectedId
+- activeView
+- search/filter/sort
+- sidebarCollapsed + sidebarWidth
+- panelOpen + panelWidth
+- any “active” concept (nowPlaying, currentItem, etc)
 
-7.3 Cross-page sync
-If multiple pages exist:
-- Persist state to localStorage (or IndexedDB if needed)
-- On page load:
-  - hydrate state
-  - render UI
-  - sync now playing + highlights correctly
+UI derives from state. Never “last click” UI.
 
-7.4 Event handling rules
+7.3 Persistence
+If it improves UX:
+- localStorage for UI state (collapsed, widths, last view)
+- On load: hydrate -> render -> sync highlights
+
+7.4 Event rules
 - Bind events once.
-- Use delegation for list rows.
-- Keep handlers small. Call state updates, then re-render minimal parts.
+- Prefer delegation for list rows.
+- Handlers update state -> render minimal areas.
+- After mutations: save() then render().
 
-7.5 Data handling
-- Parse user content defensively (Unicode safe).
-- If data missing, fail gracefully with calm fallback.
-- Cache parsed results to avoid repeated parsing.
+7.5 Performance rules
+- No heavy blur, no giant shadows.
+- Virtualize long lists if needed.
+- Avoid 500-line functions and fake abstractions.
 
-7.6 Audio handling
-- Avoid janky autoplay.
-- Duration may be unknown until metadata loads. Render “--:--” then update.
-
-7.7 Performance
-- Avoid heavy shadows and expensive blur everywhere.
-- Avoid huge DOM lists if very large (virtualize if needed).
-- Use requestAnimationFrame only when necessary.
-
-
-7.8 Overlay safety
-
-[Integrated from v1.3]
-OVERLAY SAFETY INVARIANT (mandatory)
-- Any full-screen overlay container (modal host, toast host, command palette) that uses:
+7.6 OVERLAY SAFETY INVARIANT (MANDATORY)
+Any full-screen overlay container (modal host, toast host, command palette) using:
   position: fixed; inset: 0;
-  must be non-interactive when closed. Never rely on opacity alone.
+MUST be non-interactive when closed.
+Never rely on opacity alone.
+Use [hidden]{display:none} OR pointer-events:none in closed state.
 
-Required CSS pattern (preferred):
-  .modalHost[hidden]{ display:none; }
+7.7 SCROLL CONTAINMENT (MANDATORY)
+- The page background (body) should not be the primary scroller in app-like layouts.
+- Use a fixed app shell: header + main area, and make only the main content panes scroll.
+- Sidebar, main content, and inspector panels should scroll independently when needed.
+- Modals/drawers scroll internally (never exceed viewport).
+- Avoid scroll chaining surprises: don’t trap the user; just keep scroll regions predictable.
 
-If you need transitions:
-  - Use isOpen/isClosed classes and set pointer-events:
-    .modalHost.isClosed{ opacity:0; pointer-events:none; }
-    .modalHost.isOpen{ opacity:1; pointer-events:auto; }
-
-HIDDEN ATTRIBUTE RULE
-- If you use the hidden attribute, CSS must explicitly support it.
-- Verify element.hidden === true actually removes it from layout/clicks.
-
-
-----------------------------------------------------------------
-8) ACCESSIBILITY + UX SANITY (REAL PRODUCTS DO THIS)
-----------------------------------------------------------------
-Minimum requirements:
-- Focus states for keyboard navigation.
-- Proper button semantics (button tags, not div clicks).
-- Reasonable contrast.
+------------------------------------------------------------
+8) ACCESSIBILITY + UX SANITY
+------------------------------------------------------------
+Minimum:
+- Keyboard focus styles (visible, not glowing).
+- Proper semantics (button tags, labels, aria where needed).
+- Contrast sanity (muted text still readable).
 - Click targets not tiny.
-- Hover is not the only discovery: show actions on selection too.
+- Hover isn’t the only discovery: show actions on selection too.
 
-If motion is used:
-- respect prefers-reduced-motion
+------------------------------------------------------------
+9) MICROCOPY (ANTI-TEMPLATE LANGUAGE)
+------------------------------------------------------------
+Tone: short, functional, calm.
+Prefer: “Import”, “Export”, “New…”, “Remove”, “Retry”.
 
-----------------------------------------------------------------
-9) MICROCOPY DISCIPLINE (KILLS TEMPLATE SMELL)
-----------------------------------------------------------------
+Hard ban phrases (default):
+- design-first, curated, modern layout, elevate, seamless, next-gen, premium, intuitive, powerful
+
 Rules:
-- Use functional language, not aesthetic language.
-- Titles describe what the page is, not that it is clean or modern.
-- Keep copy short.
-- Prefer product words: “Import”, “Export”, “Edit”, “Queue”, “Clear”, “Remove”.
+- No “marketing rhythm” everywhere.
+- Slightly uneven sentence length is fine.
+- Don’t narrate the UI (“This page helps you…”) except onboarding/empty states.
 
-Ban list (default):
-- design-first, curated, modern layout, demo UI, elevate, seamless, premium
-- seamless, powerful, intuitive, next-gen, streamline
+------------------------------------------------------------
+10) RESPONSIVE (NO DESKTOP-ONLY DASHBOARD)
+------------------------------------------------------------
+Breakpoints:
+- Desktop >= 1100px
+- Tablet 800–1099px
+- Mobile < 800px
 
-Anti-ChatGPT rhythm:
-- Avoid overly balanced, overly explanatory sentences everywhere.
-- Prefer short, slightly uneven, human text.
-- Do not narrate the UI ("This page helps you...") except in empty-states/onboarding.
-- Use specific labels ("Import tracks", "Add task", "Queue") instead of generic marketing.
+Behavior:
+- Sidebar becomes drawer on mobile.
+- Two-column stacks (details below list).
+- Keep actions reachable (toolbar sticks or moves smartly).
 
-----------------------------------------------------------------
-10) RESPONSIVE RULES (PREVENT DESKTOP-ONLY DASHBOARD FEEL)
-----------------------------------------------------------------
-Use 3 breakpoints:
-- Desktop: >= 1100px
-- Tablet: 800–1099px
-- Mobile: < 800px
+------------------------------------------------------------
+11) DELIVERY STANDARD (ANTI-PROTOTYPE)
+------------------------------------------------------------
+SHIP MODE (MANDATORY)
+- The delivered UI must look like a ready public product, not a dev demo.
+- Do NOT include developer-only UI in the product surface:
+  - no “Tools / Diagnostics / Self-Test / Simulate error/loading” buttons
+  - no debug panels, no placeholder dev notes, no “press / to search” hints unless it’s truly a user feature
+- Dev/testing utilities (if they exist at all) must be removed or hidden behind a non-obvious dev flag and MUST be off by default.
+- README may include setup/customize notes, but the app UI must not expose dev/testing controls to normal users.
+- No dead code, no placeholder “demo” copy.
+- Set real <title>, favicon, and consistent naming.
+- README: how to run locally, what data lives where, limitations (honest).
+-QA utilities may exist only behind ?dev=1 (or similar) and MUST be off by default.
 
-Default responsive behavior:
-- Sidebar collapses into a drawer on mobile.
-- Two-column becomes stacked (details below list).
-
-----------------------------------------------------------------
-11) DELIVERY STANDARD (ZIP QUALITY)
-----------------------------------------------------------------
-Include:
-- Clean folder structure
-- README.md that explains:
-  - how to run locally (Python http.server)
-  - where to put user files
-  - known limitations (short, honest)
-- No dead code. No placeholder analytics. No fake “demo” copy.
-
-11.1 ICON / FAVICON / TITLE POLISH (ANTI-PROTOTYPE FEEL)
-- Always set a proper <title> per page (not “App”, not “Dashboard” only).
-- Always include a minimal favicon (and optional app icon).
-- Never ship default framework icons (Vite/React/etc).
-- Never use generic “AI orb” or generic rounded-square AI logos.
-- Prefer a simple custom SVG mark that matches the UI (monochrome, restrained).
-
-
-----------------------------------------------------------------
-12) THE CRITIC + QA PASSES
-
-[Integrated from v1.3]
-Additional mandatory QA:
-- Dead-UI smoke test on every page.
-- No-missing-wiring checklist to catch single-line failures.
- (MANDATORY BEFORE SHIP)
-----------------------------------------------------------------
-PASS A: Visual critic pass
+------------------------------------------------------------
+12) CRITIC + QA PASSES (NO EXCEPTIONS)
+------------------------------------------------------------
+PASS A — Visual Critic
 - Any glow? remove.
-- Borders too visible? reduce or remove.
-- Too many boxes? remove 30–40%.
-- Capsule-in-capsule? replace with underline tabs or list nav.
-- Random badges/stats? remove.
-- Copy sounds template? rewrite.
+- Borders too strong? reduce/remove.
+- Too many boxes/cards? remove 30–40%.
+- Symmetry/template blocks? break them.
+- Generic copy? rewrite.
 
-PASS B: Layout pass
-- Header alignment clean, full width, no abrupt cutoffs.
-- Search aligns with content grid.
-- Spacing rhythm consistent (8/12/16/24).
-- Do not create large empty containers/panels just to "fill space".
-- If content is sparse, tighten the layout instead:
-  - reduce max-width, reduce panel height, remove the panel,
-  - or switch to a single-column layout for that page/state.
-- Prefer smaller, content-fitting surfaces over big blank boxes.
-- If a panel would be empty >50% of the time, redesign it (combine, collapse, or remove).
+AI-TELL QUICK TEST (run last)
+- If you can describe the page as “dashboard-ish”, it’s too generic -> make it more domain-shaped.
+- If it’s a grid of equal cards -> convert to list + inspector.
+- If accent appears in >3 places in one viewport -> reduce it.
+- If too many buttons look equally important -> demote most to text buttons.
+- If microcopy has any buzzwords -> rewrite to functional domain language.
 
-PASS C: Interaction pass
-- Hover/active/focus states consistent everywhere.
-- Only one selected highlight at a time.
-- Now-playing vs selection are visually distinct.
+PASS B — Layout
+- Alignment clean.
+- Spacing scale consistent.
+- No giant empty panels.
+- Search/toolbar aligned to content grid.
 
-PASS D: Functional QA pass
+PASS C — Interaction
+- Hover/active/focus consistent.
+- Selected vs “active/now playing” distinct.
+- Sidebar collapse and panel slide behave correctly.
 
-PASS D.1 — “Dead UI” smoke test (mandatory)
-Run this on EACH page before shipping:
-- Click sidebar navigation
-- Click the primary action button (e.g. “New …”)
-- Click/focus search input and type
-- Press `/`, `n`, and `Esc` (if shortcuts exist)
+PASS D — Functional QA (“Dead UI” smoke test)
+On EACH page:
+- Click nav
+- Use primary action
+- Use search
+- Open/close any drawers/modals
+- Refresh (state still consistent)
 
-If any click/keypress doesn’t register, immediately inspect for:
-- invisible fixed overlays (modalHost / toast layer / command palette)
-- z-index stacking issues
-- pointer-events mistakes
-- accidental position: fixed layers covering the page
+If any click doesn’t register: suspect overlays/z-index/pointer-events first.
 
+============================================================
+APPENDIX: BACKEND KEY (ONLY IF SERVER IS USED)
+============================================================
+B1) Avoid backend “AI smells”
+- microservices/over-architecture
+- fake enterprise boilerplate
+- auth/JWT “just because”
+- unused dependencies
+- vague “Something went wrong” everywhere
 
-PASS D.2 — “No missing wiring” checklist (prevents 1-line bugs)
-- Every page loads the same core CSS + JS (paths correct).
-- All controls have:
-  - event listener bound once
-  - shortcut registered once (if applicable)
-  - state update -> render path confirmed
-- Settings/modes apply on:
-  - initial load
-  - change
-  - navigation (persist + re-apply)
-- Nav highlight is route-based (not last-click based).
-- Selection state updates on delete/move/filter changes.
-- After any mutation: save() then render() (or equivalent).
+B2) Preferred backend vibe
+- small, boring, correct
+- minimal files, clear naming
 
-Core interaction QA (app-agnostic):
-- Clicking a row/item updates selection + details.
-- Primary actions update state + UI immediately (create/edit/delete/move).
-- Any “mode” toggle changes UI and persists correctly.
-- Cross-page navigation keeps state correct.
-- Refresh does not break state.
-- If any special controls exist (player, calendar, drag-drop, etc.), verify their state sync + UI sync.
+B3) Basic realism
+- validate inputs (400)
+- not found (404)
+- real server errors only (500)
+- log with context, don’t spam
 
+B4) Simple security baseline
+- secrets in .env
+- CORS only if needed
+- file uploads: size/type checks
+- never trust client input
 
+------------------------------------------------------------
+13) DELIVERY METHOD (MANDATORY)
+------------------------------------------------------------
+Default delivery:
+- Provide ONE downloadable ZIP containing the full project with the exact file tree.
+- Also print the file tree in chat (paths only), then provide the download link.
+- Do NOT paste full file contents into chat unless the user explicitly asks for inline files or a non-zip delivery.
 
-PASS D.3 — Shortcuts sanity
-- If shortcuts exist, verify:
-  - they work on all pages they’re supposed to (or scope is clearly page-only)
-  - they don’t trigger while typing in inputs
-  - they are documented in Settings → Shortcuts (or Help), not in the main sidebar
-  - they are not duplicates of obvious visible buttons unless they add real speed
-
-PASS E: Screenshot test
-- Screenshot at 100% and 110%.
-- If it reads as “template”, simplify further.
-
-----------------------------------------------------------------
-13) FONT LOADING SNIPPETS (COPY-PASTE)
-----------------------------------------------------------------
-A) Inter via Google Fonts
-- Use <link> with display=swap, or @import with care.
-
-B) Geist
-- Use Vercel font zip or npm packages if using a build pipeline.
-- For static sites, bundle woff2 and define @font-face.
-
-Pick one method per project, document it in README.
-
-END OF WEB DEVELOPER KEY (v1)
+ZIP rules:
+- Include everything needed to run locally.
+- Name the zip descriptively (project-name.zip).
+- Include a short README with run instructions and (if used) image attribution.
 
 
-----------------------------------------------------------------
-PART B — UI STYLE RULES (Visual System + Anti‑AI Design Language)
-----------------------------------------------------------------
-WIGLO — PROFESSIONAL DARK UI STYLE KEY (v3 • Anti‑AI, Critic Mode)
-=============================================================
-Use this as the DEFAULT for all websites unless the user says otherwise.
-Target vibe: ChatGPT / Discord / modern SaaS dashboards — calm, neutral dark greys.
-Priority order: (1) Real product feel, (2) cleanliness, (3) usability, (4) features.
-
-This key is intentionally detailed. It does NOT “imprison” creativity — it gives safe ranges,
-allowed variants, and a strict polish process that removes AI‑tells before shipping.
-
-----------------------------------------------------------------
-0) THE PRIME DIRECTIVE (MANDATORY)
-----------------------------------------------------------------
-Before you deliver anything:
-1) OPEN IT and LOOK at it (like a critic).
-2) Do a polish pass until NOTHING whispers “template/AI”.
-
-If you can’t visually check, then run a checklist pass and reduce obvious risk:
-- remove glow/shadows
-- reduce borders
-- simplify layout
-- remove generic copy
-- reduce UI density
-
-----------------------------------------------------------------
-1) NON‑NEGOTIABLE DEFAULTS
-----------------------------------------------------------------
-1.1 Typography
-- Font stack: "Söhne" (if installed) -> "Inter" -> system-ui (Segoe UI, SF, etc).
-- Load Inter via Google Fonts by default. (Offline-only is allowed if requested.)
-- Weights:
-  - Body: 400–500
-  - UI labels: 600–700
-  - Titles: 750–850
-- Avoid: excessive letter-spacing, full caps everywhere, “fancy” display fonts by default.
-
-1.2 Color / Mood
-- Neutral, low-saturation greys. Avoid “blue theme” by default.
-- No neon. No glow. No glossy gradients.
-- No pure black background (#000) and no pure white text (#fff). Use off‑black and off‑white.
-
-1.3 Borders / Shadows
-- Minimal borders. If a border is visible at a glance, it’s too strong.
-- Shadows are NOT for style. Only for subtle hierarchy. Prefer inset strokes over drop shadows.
-- If any surface looks like it’s “glowing”: remove outer shadow, remove bright rim highlights.
-
-1.4 Layout philosophy
-- Spacing-driven separation > “cards everywhere”.
-- Avoid feature dumping. Simple beats “dashboard of everything”.
-
-1.5 Logo / Icons
-- Never use the generic rounded-square AI logo (gradient blob in a rounded square).
-- Use a custom SVG mark or small image that DOESN’T sit in a big rounded container.
-- Icons are monochrome, simple, not oversized.
-
-1.6 Microcopy
-- Avoid template fluff: “design-first UI”, “curated essentials”, “modern layout”, “demo UI”.
-- Copy must sound like a real product: short, functional, calm.
-
-----------------------------------------------------------------
-2) DESIGN TOKENS (NEUTRAL GREY SYSTEM)
-----------------------------------------------------------------
-Use tokens so the UI stays consistent and avoids accidental “blue” drift.
-These are target ranges — adjust by eye for the project’s content density.
-
-2.1 Surfaces (HSL targets)
-- --bg:        hsl(220 11% 8%)    (page background, not pure black)
-- --sidebar:   hsl(220 10% 11%)   (slightly lighter than bg)
-- --surface:   hsl(220 10% 12%)   (panels/containers)
-- --surface2:  hsl(220 10% 10%)   (panel headers / subtle contrast)
-- --surface3:  rgba(0,0,0,.12~.18) (soft overlays)
-
-2.2 Text
-- --text:   hsl(220 18% 92%)  (off-white)
-- --muted:  hsl(220 10% 68%)  (secondary text)
-- --faint:  hsl(220 8% 55%)   (placeholders, tertiary)
-
-2.3 Strokes (borders)
-- --stroke:  rgba(255,255,255, 0.07–0.12)
-- --stroke2: rgba(255,255,255, 0.05–0.08)
-Rule: borders must be “felt”, not “seen”.
-
-2.4 Interaction fills (the important part)
-Hover/active should mostly be brightness shifts (not color shifts).
-- --hover:  rgba(255,255,255, 0.05–0.08)
-- --active: rgba(255,255,255, 0.08–0.12)
-
-HOVER RULE OF THUMB (dark mode):
-- Hover: surface + 5–10% brightness (subtle but noticeable)
-- Active/selected: surface + ~10–14% brightness
-- Focus: thin ring or inset stroke slightly stronger (no glow)
-
-2.5 Accent colors (OPTIONAL, never forced)
-Default: NO strong accent. If accent is needed, choose one of these modes:
-
-MODE A: Neutral-only (ChatGPT-like)
-- Use no color accents. Use weight, spacing, and subtle fills.
-
-MODE B: Low-sat Accent (Discord-like)
-- One accent, desaturated, used sparingly:
-  - links, active underline, tiny indicator, maybe a primary button in rare cases
-- Accent must not dominate the UI.
-
-MODE C: Brand Accent (Twitch-like hover behavior)
-- Keep UI neutral; use accent only for hover/active on key actions (1–2 places).
-- Example: hover background stays grey, but icon/text can tint slightly.
-
-IMPORTANT:
-- If you add an accent, test it on the darkest and lightest surfaces.
-- Accent must never look like “default blue theme”.
-
-----------------------------------------------------------------
-3) CORNER RADII (ANTI-TEMPLATE)
-----------------------------------------------------------------
-Do NOT use one radius for everything.
-
-Use a 3-radius set:
-- r-sm: 10px  (icon buttons, small hover pills)
-- r-md: 14px  (nav items, inputs, small panels)
-- r-lg: 18px  (big panels)
-
-Rule:
-- Search inputs can be 999px pill radius.
-- Do NOT wrap everything in pill corners.
-
-----------------------------------------------------------------
-4) COMPONENT RECIPES (WHAT LOOKS REAL)
-----------------------------------------------------------------
-4.1 Navigation (Sidebar)
-Preferred:
-- Text + icon rows
-- Hover: subtle grey fill
-- Active: slightly stronger grey fill
-- No neon indicator bars
+DELIVERY NOTES (MANDATORY IN CHAT)
+After the file tree + ZIP link, include a short “Run + Customize” block with:
+- How to run (exact steps; e.g., open index.html or use Live Server)
+- Where to edit content/data (exact file + search anchors)
+- Any required IDs/links to replace (what + where)
+- Known limitations (1–3 bullets max)
+Keep it under ~12 lines. No long explanations.
 
 
-Avoid:
-- “Segmented control pills” for page navigation (often screams template/AI)
-- Too many nested boxes in the sidebar
-
-4.2 Tabs / Switching views (fixing your screenshot problem)
-The segmented “Library / Playlist” pill often reads AI because it’s:
-- over-rounded, over-bordered, and too “component kit”
-
-Use ONE of these professional patterns instead:
-
-PATTERN 1 (ChatGPT-ish list style)
-- Simple text items (left aligned)
-- Hover adds a soft grey background
-- Active has a slightly stronger fill
-
-PATTERN 2 (Underline tabs)
-- Tabs are plain text
-- Active tab: subtle underline + slightly brighter text
-- Hover: text brightens; optional faint underline on hover
-- No big pill container
-
-PATTERN 3 (Minimal segmented, only if needed)
-- Only use segmented control when it’s truly “mode toggle” (not navigation)
-- If used: remove heavy borders, reduce rounding, keep fills very subtle
-
-Quick fix rule:
-If a control looks like a “rounded capsule inside a rounded capsule”, remove it.
-
-4.3 Buttons
-Default button style is TEXT-LIKE.
-- Base: transparent background
-- Hover: subtle grey fill
-- Active: slightly stronger fill
-- Primary button: only if the UI truly needs a primary action
-  - Keep it dark and restrained; never big white CTA by default
-
-ACTION PLACEMENT REALISM (NO FLOATING HEADER LINKS)
-- Primary actions must live where users expect:
-  - In a page toolbar above the list/table, or next to the list title,
-  - OR inside the relevant panel header (aligned to the same grid).
-- Avoid placing "New X / New Y" as loose text links floating in the header.
-- If actions appear in a header row:
-  - visually group them, align them to the content grid,
-  - and style them as actions (not navigation).
-- Actions should not look like extra nav items.
-
-Avoid:
-- Big white buttons with black text (reads template)
-- Overusing “primary” buttons everywhere
-
-4.4 Inputs (Search)
-- Use a pill search with dark fill + subtle inset stroke
-- Focus: slightly stronger inset stroke
-- Avoid thick outlines, avoid glows
-
-4.5 Lists / Tables
-- Rows: hover fill only (no heavy gridlines)
-- Selected row: slightly stronger fill
-- Use tabular numerals for time and numbers
-
-4.6 Panels / Containers (remove the “glow”)
-Preferred:
-- Soft surface layer + subtle inset stroke
-- Minimal or no external shadow
-
-Avoid:
-- Drop shadows that create a halo/glow
-- Bright rim highlights
-
-Rule:
-If a panel feels like it’s floating, it’s probably too shadowed.
-
-4.7 Icons
-- Simple monochrome icons (SVG)
-- Avoid giant icons and decorative badges
-
-----------------------------------------------------------------
-5) MOTION / ANIMATION (OPTIONAL)
-----------------------------------------------------------------
-Default: minimal.
-- 120–180ms transitions for hover/focus
-- ease-out, not bouncy
-Avoid:
-- fancy “spring” animations everywhere
-- glowing pulses
-
-----------------------------------------------------------------
-6) CONTENT DENSITY (THIS IS WHERE AI FAILS)
-----------------------------------------------------------------
-AI UIs often cram too much to “show capability”.
-Professional UIs choose restraint.
+------------------------------------------------------------
+14) ASSETS (ICONS/LOGOS/IMAGES) (PREFERRED ORDER)
+------------------------------------------------------------
+Preferred order:
+1) Generate simple vector assets yourself (SVG): app mark/logo, icons, tiny illustrations.
+2) Use free external images ONLY if needed and only if they are clearly licensed for reuse (e.g., Unsplash/Pexels) and you include attribution in README when required by the license.
+3) Never hotlink random images from Google results.
 
 Rules:
-- Fewer sections on a page
-- One dominant action per area
-- Avoid “dashboard soup” (too many cards)
+- Keep assets minimal, monochrome or low-saturation, consistent with the UI.
+- Avoid generic “AI orb” logos.
+- Prefer SVG for crispness; embed inline or store in /assets (if using /assets, include it in the ZIP).
+- External images must be downloaded into the project (no external URLs at runtime) unless the user explicitly allows hotlinking.
 
-If unsure, remove elements rather than add more.
+APPENDIX A) WHAT PEOPLE CALL “AI WEBSITE LOOK” (COMMUNITY SIGNALS)
+---------------------------------------------------------
+(Condensed from webdev/Reddit discussions where people say a site “looks AI-made”.)
 
-----------------------------------------------------------------
-7) MICROCOPY RULES (REMOVE TEMPLATE SMELL)
-----------------------------------------------------------------
-Ban these phrases by default:
-- “Design-first UI”
-- “Curated essentials”
-- “Modern layout”
-- “Demo UI”
-- “Neutral type”
-- “Clean design” as a headline
+A1) Template-ish composition
+- Centered “hero + 3 feature cards + testimonials + pricing” even when the product is not SaaS.
+- Too-symmetrical grid, everything perfectly aligned and evenly spaced like a template.
+- Over-structured sections: many containers, many borders, many cards, no breathing negative space.
 
-Prefer:
-- Short functional labels:
-  - “Import files”, “Edit info”, “Now playing”, “Search…”, “Nothing playing”
-- If you need a subtitle: describe function, not aesthetics.
+A2) Generic design tokens / “Tailwind default vibe”
+- Default shadcn/tailwind UI look (typical button shapes, typical cards, default radii, default shadow).
+- The same radius everywhere, same stroke everywhere, same spacing everywhere.
+- “Design system” feels copied rather than built for the product.
 
-----------------------------------------------------------------
-8) FORBIDDEN PATTERNS (HARD BAN LIST)
-----------------------------------------------------------------
-If any of these appear, remove/replace them:
-- Neon gradients, glow effects, spotlight radial backgrounds behind content
-- Blue/purple default theme accents everywhere
-- Thick borders around everything (“UI kit outline”)
-- Same radius everywhere
-- Big pill segmented controls for navigation (unless justified)
-- “Everything is a card” layouts
-- Generic AI logo in rounded square
-- Overly symmetrical hero sections + feature tiles + chips + badges everywhere
-- Big white CTA buttons by default
-- Microcopy that sounds like a template
+A3) Color tells (especially in dark mode)
+- The “random purple” or “blue-purple gradient” that screams AI/crypto/SaaS.
+- Too-bright accent, too much saturation on dark backgrounds.
+- Glow everywhere (drop shadows, neon focus rings, soft bloom behind sections).
 
-----------------------------------------------------------------
-9) THE “WEBSITE CRITIC” QC PASS (MANDATORY BEFORE SHIP)
-----------------------------------------------------------------
-Open the site and do this in order:
+A4) Typography tells
+- Overly polite, marketing-y copy. Generic microcopy like “Get started”, “Boost productivity”, “Seamless”.
+- Too many emojis, too many “friendly” headlines, too much hype.
+- Headings are too similar in size/weight; no real hierarchy.
+- Monotone line-height and spacing (robotic).
 
-PASS A — Contrast & Glow
-- Do any panels glow? Remove outer shadows or reduce drastically.
-- Are borders too visible? Lower stroke opacity or remove borders.
-- Is the UI accidentally blue? Neutralize hues.
+A5) Interaction tells
+- Hover effects are dramatic (scale-up cards, big shadow, big color shift).
+- Animations are either absent (lifeless) OR excessive and “demo-y”.
+- No real “product behaviors” (empty states, error states, keyboard navigation, loading skeletons).
 
-PASS B — Boxiness
-- Are there too many cards/containers? Remove 30–40% of them.
-- Replace with spacing + headings + dividers.
+A6) Content tells
+- Fake metrics, fake logos, generic testimonials.
+- Placeholder data that feels random/unrealistic (“Project A”, “John Doe”, “Acme Inc.”).
+- No constraints: never shows “long titles”, “no results”, “permission denied”, “offline”.
 
-PASS C — Tabs & Toggles
-- If there’s a segmented pill toggle that looks template-y:
-  - Replace with underline tabs or sidebar list nav.
+A7) How to counter it (rules you should add as hard QA items)
+- Every page MUST have at least:
+  - a real empty state
+  - a real loading state (skeleton or spinner used sparingly)
+  - a real error state
+  - a realistic data stress test (long names, huge lists, slow network)
+- Prefer product-shaped layouts (tool UI) over marketing landing pages unless explicitly asked.
+- Use a “boring real app” color model: neutral surfaces + subtle strokes + restrained accent.
+APPENDIX B) REAL-WORLD DARK PALETTES (COPY/PASTE TOKEN SETS)
+---------------------------------------------------
+IMPORTANT:
+- Treat these as “proven reference palettes”. You can mix them, but keep the *relationship*:
+  - Sidebar/rails are typically darker or flatter than the main canvas.
+  - Main canvas is one step lighter OR one step cleaner (less visual noise).
+  - Borders are usually low-contrast (alpha, not pure hex).
+- Do NOT sprinkle random accents. Keep accent usage rare and functional.
 
-PASS D — Spacing & Alignment
-- Check header spans full width correctly.
-- Ensure search aligns cleanly and doesn’t “end abruptly”.
-- Ensure consistent padding and rhythm (8/12/16/24).
+B0) Quick rule: pick ONE base family
+- Choose ONE of these palette families as the “base” for a project.
+- Then pick ONE accent family (blue, green, orange) and use it consistently.
 
-PASS E — Copy & Labels
-- Replace any generic text with short, real product copy.
-- Remove “aesthetic commentary” (don’t describe the UI as clean/modern).
+B1) GitHub Dark Default (VS Code theme proxy)
+(Source: GitHub Dark Default theme JSON served on jsDelivr; matches github.com’s general vibe.)
+Core neutrals:
+- bg0 (main):        #0d1117
+- bg1 (sidebar/panel):#010409
+- surface0:          #161b22
+- surface1:          #21262d
+- border/stroke:     #30363d
+Text:
+- text:              #e6edf3
+- muted:             #7d8590
+- subtle:            #6e7681
+Accent + states:
+- accent blue:       #2f81f7
+- focus blue:        #1f6feb
+- success green:     #2ea043 / #3fb950 (hover/highlight variants exist)
+- danger red:        #f85149
+- warning amber:     #d29922
+Useful overlays (already “GitHub-ish”):
+- hover fill:        #6e76811a   (very light, alpha)
+- selection fill:    #6e768166
+- focus fill:        #388bfd26
 
-PASS F — States
-- Hover: subtle grey fill (5–10% brightness shift)
-- Active: slightly stronger
-- Focus: visible but not glowing; accessibility-friendly
+Drop-in CSS vars:
+:root{
+  --bg0:#0d1117;--bg1:#010409;--surface0:#161b22;--surface1:#21262d;--stroke:#30363d;
+  --text:#e6edf3;--muted:#7d8590;--subtle:#6e7681;
+  --accent:#2f81f7;--focus:#1f6feb;--success:#2ea043;--danger:#f85149;--warn:#d29922;
+  --hover:rgba(110,118,129,.10); /* ~#6e76811a */
+  --select:rgba(110,118,129,.40); /* ~#6e768166 */
+}
 
-PASS G — Zoom & Screenshot Test
-- View at 100%, 90%, 110% zoom
-- Take a screenshot and look for:
-  - harsh borders
-  - weird cutoffs
-  - “template feel”
-  - too many boxes
+B2) VS Code “Default Dark Modern”
+(Source: Microsoft VS Code dark_modern.json)
+Core neutrals:
+- rails/sideBar/panel/titleBar: #181818
+- main editor canvas:           #1F1F1F
+- input/controls:               #313131
+- subtle stroke:                #2B2B2B (borders), #3C3C3C (inputs)
+Text:
+- text:                         #CCCCCC
+- bright text:                  #FFFFFF
+- muted:                        #9D9D9D / #868686
+Accent:
+- blue:                         #0078D4
+Notes:
+- This is a *very* safe “professional dev tool” base: minimal, flat, readable.
 
-PASS H — “If I saw this online, would I think it’s a template?”
-If yes: simplify, reduce borders/shadows, fix copy.
+Drop-in CSS vars:
+:root{
+  --bg-rails:#181818;--bg0:#1f1f1f;--control:#313131;--stroke:#2b2b2b;--stroke2:#3c3c3c;
+  --text:#cccccc;--text-strong:#ffffff;--muted:#9d9d9d;--accent:#0078d4;
+}
 
-----------------------------------------------------------------
-10) ALLOWED VARIANTS (SO YOU CAN STILL THINK)
-----------------------------------------------------------------
-You may change:
-- exact greys (as long as neutral + low-sat)
-- which pattern for tabs (underline vs list vs minimal segmented)
-- degree of rounding (as long as not uniform everywhere)
-- whether accent exists (none / low-sat / brand accent)
-- layout structure (as long as it remains spacing-driven and calm)
+B3) Discord (modern dark UI values people reference)
+(Community-measured palette; values can differ slightly by platform/version.)
+Common neutrals seen in modern Discord UI:
+- bg main:            #313338
+- bg secondary:       #2b2d31
+- bg tertiary/rails:  #1e1f22
+- text:               #f2f3f5 (often near-white)
+- muted:              #b5bac1 (grey)
+Notes:
+- Discord uses “layered neutrals” with a darker rail and slightly lighter content.
+- Borders are extremely subtle (often almost invisible). Separation is from layers.
 
-But you must keep:
-- no glow
-- minimal borders
-- no generic AI logo
-- no template microcopy
-- critic-mode QC pass
+B4) YouTube dark UI (common palette references)
+(Community-measured, may differ by device.)
+Common dark neutrals:
+- main background:    #0f0f0f to #181818
+- surface/cards:      #212121
+- divider/stroke:     #3d3d3d
+Text:
+- text:               #ffffff
+- secondary:          #aaaaaa
+Notes:
+- YouTube uses “almost-black” base + minimal strokes + strong content hierarchy.
 
-----------------------------------------------------------------
-11) REFERENCE PRINCIPLES (WHY THESE RULES EXIST)
-----------------------------------------------------------------
-Common dark-mode UI best practices:
-- Hover states should be subtle brightness shifts (5–10%) instead of big color changes.
-- Avoid pure white on pure black; prefer off-whites for comfort.
-- Overusing shadows and borders makes UIs feel template-like.
-- Use design tokens for hover/active states to keep interactions consistent.
+B5) Spotify (brand + UI neutrals)
+(Brand green is stable; UI uses deep neutrals.)
+Core:
+- brand green:        #1ED760
+- bg0:                #121212
+- surface:            #212121
+- muted surfaces:     #535353
+- muted text:         #b3b3b3
+- text:               #ffffff
+Notes:
+- Spotify’s trick: high contrast typography + restrained green used for primary actions only.
 
-END OF KEY (v3)
+B6) Notion (dark mode references)
+Notion’s colors vary by platform/version; two common references:
+- newer “very dark” vibe: #191919 (often cited)
+- older slate vibe:       #2F3437 (commonly cited historically)
+Notion’s feel is:
+- very low-contrast strokes (barely visible)
+- lots of whitespace (negative space), not boxes
+- typography and spacing do most of the UI work
 
+B7) Choose your default (recommended)
+- If you want a “ChatGPT/Discord/GitHub” hybrid: start with GitHub Dark Default neutrals, then soften strokes (lower alpha).
+- If you want “super professional tool UI”: start with VS Code Dark Modern neutrals.
 
-END OF MASTER WEB KEY (v1.4)
+B8) Sidebar darkness rule (almost universal)
+- Sidebar/rails should be ~5–12% darker (or “flatter”) than main content canvas.
+- Don’t do the opposite (bright sidebar + dark canvas) unless it’s a deliberate brand move.
+APPENDIX C) SURFACE ELEVATION WITHOUT “SHADOW GLOW” (DARK MODE OVERLAY TABLE)
+--------------------------------------------------------------------
+Problem:
+- Dark UIs look fake when you add lots of drop shadows.
+Solution:
+- Use “overlay elevation” (slightly lighter surface) instead of “floating shadow”.
+
+Material-style approach (base #121212 + white overlay).
+(Source: StackOverflow community mapping based on Material dark theme guidance.)
+
+Elevation overlay mapping:
+00dp | overlay 0%  | #121212
+01dp | overlay 5%  | #1e1e1e
+02dp | overlay 7%  | #222222
+03dp | overlay 8%  | #242424
+04dp | overlay 9%  | #272727
+06dp | overlay 11% | #2c2c2c
+08dp | overlay 12% | #2e2e2e
+12dp | overlay 14% | #333333
+16dp | overlay 15% | #343434
+24dp | overlay 16% | #383838
+
+How to use it in web UI:
+- Base background: 00dp
+- Cards/panels: 01–04dp (subtle)
+- Modals/popovers: 06–12dp (still subtle)
+- Avoid “24dp everywhere”. If you need 24dp, you probably need less UI density.
+
+CSS helper:
+.surface-0{background:#121212;}
+.surface-1{background:#1e1e1e;}
+.surface-2{background:#222;}
+.surface-3{background:#242424;}
+.surface-4{background:#272727;}
+.surface-6{background:#2c2c2c;}
+.surface-8{background:#2e2e2e;}
+.surface-12{background:#333;}
+.surface-16{background:#343434;}
+.surface-24{background:#383838;}
+APPENDIX D) PROFESSIONAL “TOOL UI” LAYOUT PATTERNS (VERY HUMAN, VERY COMMON)
+--------------------------------------------------------------------
+D1) 3-layer app shell (super common)
+- Left: primary nav rail / workspace list (collapsible)
+- Middle: main content (list/table/editor)
+- Right: details inspector (optional, collapsible, slides in)
+This is used everywhere because it scales: GitHub, Discord, VSCode, Figma-ish tools.
+
+D2) Collapsible sidebar with “arrow” affordance (do this)
+- Provide a clear “collapse” icon at the bottom or top of sidebar.
+- Collapsed state becomes icon-only rail (56–72px).
+- Remember state (localStorage).
+- Don’t animate too long: 180–260ms.
+
+D3) Resizable split panes (do this when you have list + detail)
+- List pane default ~320–420px.
+- Drag handle 6–10px wide (invisible but usable); cursor: col-resize.
+- On drag: show a 1px guide line, not a huge overlay.
+- Save the width after drag ends.
+
+D4) Inspector panels (right side) with slide-in
+- Use when selecting an item reveals details.
+- Closed by default on mobile.
+- Slide-in from right; keep “scrim” minimal or none in desktop tool UIs.
+- If there is a scrim: very subtle (black at 0.25–0.35).
+
+D5) Sticky headers (but not thick)
+- A thin sticky bar for search/filter/sort.
+- Keep it one row, not multiple stacked toolbars.
+- Prefer “one good search” + “one filter dropdown” over 12 chips.
+
+D6) “Command palette” for power actions
+- Ctrl+K or / opens it.
+- It reduces UI clutter (no need to show every action as a button).
+- If present, it must not look like a template: keep it plain, tight, and fast.
+
+D7) Lists feel human when they have:
+- row hover
+- selection
+- keyboard nav (↑↓, Enter)
+- context menu (right click / ... menu)
+- empty states
+- subtle separators (or none, using spacing)
+APPENDIX E) MOTION + MICROINTERACTIONS (HUMAN, NOT DEMO-Y)
+--------------------------------------------------
+General:
+- Motion should communicate state changes and spatial relationships.
+- Motion must be consistent across the app.
+- Use transform + opacity, not box-shadow growth.
+- Respect prefers-reduced-motion.
+
+E1) Timing defaults (safe)
+- micro hover/focus: 120–160ms
+- simple expand/collapse: 160–220ms
+- panel slide in/out: 220–280ms
+- modal popover: 160–220ms
+- list reorder/insert: 160–220ms
+
+E2) Easing defaults (safe)
+- ease-out for entrances (fast start -> soft stop):
+  cubic-bezier(0.16, 1, 0.3, 1)
+- ease-in for exits (soft start -> faster finish):
+  cubic-bezier(0.7, 0, 0.84, 0)
+- avoid “bouncy spring” unless it’s a playful app.
+
+E3) Panel slide recipe (YouTube comments style)
+- Start: x=24px, opacity=0
+- End: x=0px, opacity=1
+- Duration: 220–260ms
+- Easing: ease-out (above)
+
+CSS:
+.panel{
+  transform:translateX(24px);
+  opacity:0;
+  transition:transform 240ms cubic-bezier(.16,1,.3,1), opacity 180ms ease-out;
+}
+.panel[data-open="true"]{
+  transform:translateX(0);
+  opacity:1;
+}
+
+E4) Dropdown / popover recipe
+- Start: y=-4px, opacity=0, scale=0.98
+- End: y=0, opacity=1, scale=1
+- Duration: 140–180ms
+- Easing: same ease-out
+
+E5) “Slightly alive” without looking like AI demo
+- Subtle skeleton shimmer (slow, low contrast) OR static skeleton.
+- One tasteful animation per screen max (don’t animate everything).
+
+E6) Reduced motion
+- If prefers-reduced-motion: disable transform animations, use opacity only (fast).
+APPENDIX F) “REAL PRODUCT” DETAILS THAT BREAK THE AI TEMPLATE FEEL
+---------------------------------------------------------
+These are the tiny things humans subconsciously expect.
+
+F1) Stress test content (do it before shipping)
+- Very long names (60–120 chars)
+- Empty lists
+- Large lists (100–1,000 rows)
+- Failed network request
+- “No permission”
+- Offline mode (optional)
+- Slow response (spinner or skeleton)
+
+F2) Real empty states (not marketing)
+Bad: “No items yet. Start by creating your first amazing item!”
+Good: “No projects.” + a short reason + one clear action button.
+Even better: “No projects” + “Import” option + “Create new”.
+
+F3) Real error states
+- Show what happened in normal language.
+- Provide one recovery action.
+- Provide “Copy error details” in advanced section.
+
+F4) Real microcopy tone (tool UI tone)
+- Short, calm, direct.
+- Avoid hype words: “seamless”, “revolutionary”, “empower”, “unlock”.
+- Avoid emoji unless the app is actually playful.
+
+F5) Keyboard affordances
+- Tooltips show shortcut hints (Ctrl+K).
+- Inputs respect Enter/Esc.
+- Modal: Esc closes, focus trap works.
+
+F6) Scroll behavior
+- Long panes scroll independently (sidebar scroll separate from main).
+- Sticky headers don’t stack.
+
+F7) Context actions
+- Item rows have a subtle “…” menu on hover.
+- Right-click opens context menu (desktop).
+
+F8) “This was made by a human” detail
+- One or two opinionated choices:
+  - slightly unusual spacing in one area
+  - a custom empty-state illustration (minimal)
+  - a custom icon (not generic AI logo)
+APPENDIX G) SNIPPET RECIPES (FOR IMPLEMENTATION CONSISTENCY)
+---------------------------------------------------
+These are “known good” patterns that keep you out of template hell.
+
+G1) Token-first CSS (do this)
+- Put tokens in :root (or CSS variables in Tailwind config).
+- All components must reference tokens, not raw colors.
+
+G2) Low-contrast strokes (rule)
+- Prefer alpha strokes over solid hex.
+Examples:
+- rgba(255,255,255,0.06) for subtle dividers on dark
+- rgba(255,255,255,0.10) for focused outlines
+- Avoid pure #333 borders everywhere.
+
+G3) Resizable split pane (vanilla JS)
+HTML:
+<div class="split">
+  <aside id="left"></aside>
+  <div id="gutter" aria-hidden="true"></div>
+  <main id="main"></main>
+</div>
+
+CSS:
+.split{display:grid;grid-template-columns:320px 8px 1fr;height:100%;}
+#gutter{cursor:col-resize;background:transparent;position:relative;}
+#gutter::after{content:"";position:absolute;left:3px;top:0;bottom:0;width:1px;background:rgba(255,255,255,.06);opacity:0;transition:opacity 120ms;}
+#gutter:hover::after{opacity:1;}
+
+JS:
+const left=document.getElementById("left");
+const gutter=document.getElementById("gutter");
+let dragging=false,startX=0,startW=0;
+gutter.addEventListener("pointerdown",(e)=>{
+  dragging=true;startX=e.clientX;startW=left.getBoundingClientRect().width;
+  gutter.setPointerCapture(e.pointerId);
+  document.body.style.cursor="col-resize";
+});
+gutter.addEventListener("pointermove",(e)=>{
+  if(!dragging) return;
+  const w=Math.max(220,Math.min(520,startW+(e.clientX-startX)));
+  document.querySelector(".split").style.gridTemplateColumns=`${w}px 8px 1fr`;
+});
+gutter.addEventListener("pointerup",(e)=>{
+  dragging=false;document.body.style.cursor="";
+});
+
+G4) Sidebar collapse (layout safe)
+- Keep DOM stable; just change grid column widths.
+- Animate width change (but not too slow).
+- Save state to localStorage.
+
+G5) Focus ring (non-glowy)
+- Use outline: 2px solid rgba(accent, .55) with 1px offset.
+- No outer shadow halo.
+
+G6) Shadow policy (dark mode)
+- Avoid big drop shadows. Use:
+  - inset stroke
+  - surface elevation (overlay table)
+  - very small shadow only for popovers if needed:
+    0 8px 24px rgba(0,0,0,.35) (single layer, no glow)
+APPENDIX H) OPTIONAL: “PALETTE EXTRACTION” METHOD (IF YOU WANT MORE APP MATCHING)
+------------------------------------------------------------------------
+If you want to match a specific website/app:
+- Open DevTools → Inspect the sidebar background, main background, input background, stroke color, and text color.
+- Record them as tokens:
+  --bg0, --bg1, --surface0, --surface1, --stroke, --text, --muted, --accent
+- Then build the rest (hover fills, selection fills) using alpha of text or muted text.
+
+Rule of thumb for hover/selection on dark:
+- hover fill: text color at 6–10% alpha
+- selection fill: text color at 14–22% alpha
+- pressed: selection + a bit darker (or 26% alpha)
