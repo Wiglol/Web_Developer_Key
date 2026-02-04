@@ -1,34 +1,24 @@
-WIGLO — MASTER WEB KEY (v4 CLEAN PRIORITY)
+WIGLO — MASTER WEB KEY (FINAL)
 ===========================================
 
 THIS IS FOR THE AI ONLY.
 Goal: When asked to build an app/site, follow this spec strictly to avoid the default AI/template look.
 If user requirements conflict with this key: ask or choose the more “real product” option (unless user explicitly overrides).
 
-
-RULE PRIORITY SYSTEM
-- HARD RULES: Anything written with MUST / MUST NOT / DO NOT / NEVER / REQUIRED.
-- DEFAULT RULES: Anything written with SHOULD / Recommended / Preferred / Avoid.
-- OPTIONAL: Only when explicitly labeled OPTIONAL.
-Unless something is labeled OPTIONAL, treat it as REQUIRED.
-
-PRIORITY ORDER
+PRIORITY ORDER (MANDATORY)
 1) Real product feel (ship-ready behavior)
 2) Theme profile (DARK default; LIGHT available via 3.6)
 3) Clarity + usability + interaction states
 4) Correctness + state wiring
 5) Features (avoid feature soup)
 
-GLOBAL ENFORCEMENT RULE (READ THIS)
-Everything in this document is REQUIRED unless it explicitly says OPTIONAL.
-Do NOT cherry-pick only the most obvious rules—apply this as one coherent system.
-If you must deviate for a project requirement, deviate minimally and keep consistency.
+GLOBAL ENFORCEMENT RULE
 Everything in this document is REQUIRED unless it explicitly says OPTIONAL.
 “MUST / MUST NOT / DO NOT / NEVER / REQUIRED” = hard rules.
 “SHOULD / Recommended / Preferred / Avoid” = strong defaults (follow unless user explicitly overrides, or it breaks ship-readiness/usability).
 Do not treat “OPTIONAL BUT…” sections as optional if they directly improve ship feel and do not add clutter.
 
-CONFLICT RESOLUTION
+CONFLICT RESOLUTION (MANDATORY)
 If any rules conflict:
 1) User’s explicit requirements win, unless they break interactivity, accessibility, or ship-readiness.
 2) Then follow PRIORITY ORDER.
@@ -36,7 +26,7 @@ If any rules conflict:
 4) If still tied: choose the simpler UI with fewer boxes, fewer effects, clearer hierarchy.
 Never narrate these tradeoffs to the user.
 ------------------------------------------------------------
-0) PRIME DIRECTIVE
+0) PRIME DIRECTIVE (MANDATORY EVERY TIME)
 ------------------------------------------------------------
 Before delivering:
 A) Critic Pass: remove anything that whispers “template/AI”.
@@ -52,7 +42,8 @@ If you cannot visually check:
 
 ------------------------------------------------------------
 
-ARCHETYPE SELECTOR
+
+ARCHETYPE SELECTOR (MANDATORY)
 - Before building any UI, pick ONE archetype and stick to it:
   A) TOOL / DASHBOARD (sidebar + list/table + inspector)  [default]
   B) CATALOG / STORE (top tabs + horizontal rails + detail pages)  [Google Play-like]
@@ -61,36 +52,6 @@ ARCHETYPE SELECTOR
 
 - Do NOT mix archetypes on a single page.
 - If the user’s request is unclear, default to A) TOOL.
-
-0.1 DEFAULT BUILD RECIPE (FIRST TRY MUST LOOK GOOD)
-------------------------------------------------------------
-If the user did not provide a full layout, build the first version like this:
-
-1) Choose the UI TYPE:
-   - TOOL / DASHBOARD: sidebar + list/table + details/inspector (default).
-   - CONTENT / BLOG: left nav or top nav + readable content column.
-   - LANDING PAGE: only if explicitly requested.
-
-2) Create a token map FIRST (no improvising later):
-   - 3–5 surfaces: bg, rails/sidebar, surface, surface2, raised
-   - text: text, muted, faint
-   - stroke: one subtle stroke color (8–14% contrast max)
-   - radius: pick ONE system and stick to it (recommended: 10–12px default, 8px small)
-   - spacing scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 (do not invent random gaps)
-   - motion: use the timing presets in section 6
-
-3) Build the “app shell”:
-   - Left rail/sidebar (darker) with 6–10 items max.
-   - Top bar (optional) with search + 1–2 primary controls.
-   - Main area = list/table.
-   - Right inspector/details (optional, but “real app” signal).
-
-4) Wire the 4 must-have states immediately:
-   - loading, empty, error, success
-   - plus a “selected item” state for lists (selection ≠ active ≠ hover)
-
-5) Run PASS A + PASS B before shipping anything.
-------------------------------------------------------------
 
 1) PRODUCT THINKING (ANTI “FEATURE SOUP”)
 ------------------------------------------------------------
@@ -120,7 +81,7 @@ Avoid: “hero + 3 cards + CTA” unless user explicitly wants a landing page.
 - Main: primary content (list/table/form)
 - Optional: right inspector/details panel (only if needed)
 
-CONTENT WIDTH + READABILITY
+CONTENT WIDTH + READABILITY (MANDATORY)
 - On very wide screens, cap the main content column:
   - tool UIs: max-width 1200–1400px for the primary canvas
   - text-heavy screens: max-width 65–80ch for paragraphs
@@ -140,15 +101,6 @@ CONTENT WIDTH + READABILITY
 COMPACT (tool-like): tighter rows, more data visible.
 COMFORTABLE (default): balanced.
 AIRY (marketing-ish): only if content is minimal.
-
-2.4.1 Sizing system
-- Pick ONE density (Compact / Comfortable / Airy) and then lock these numbers:
-  - Row height: Compact 32–36px | Comfortable 40–44px | Airy 48–56px
-  - Button height: Compact 30–32px | Comfortable 34–36px | Airy 40–44px
-  - Input height:  Compact 28–32px | Comfortable 32–36px | Airy 40–44px
-  - Corner radius: default 10–12px, small 8px (do not mix 6/8/10/12 randomly)
-  - Stroke: 1px only (no 2px borders unless for focus ring)
-- If any component breaks the system, fix the component, not the system.
 
 ------------------------------------------------------------
 2.5) PRO POLISH RULES (ANTI-AI MULTIPLIERS)
@@ -269,11 +221,11 @@ If accent is needed:
 
 ------------------------------------------------------------
 
-3.6 THEME PROFILES (DARK DEFAULT, LIGHT OPTIONAL)
+3.6 THEME PROFILES (DARK DEFAULT, LIGHT OPTIONAL) (MANDATORY IF USER ASKS)
 ------------------------------------------------------------
 This key defaults to DARK (layered greys). If the user asks for a white/light UI (e.g. app-store look like Google Play), switch to LIGHT profile below.
 
-THEME IMPLEMENTATION
+THEME IMPLEMENTATION (MANDATORY)
 - Use semantic tokens (CSS variables) for ALL surfaces and text.
   Example tokens:
   --bg, --sidebar, --surface-1, --surface-2, --stroke, --text, --muted, --accent, --accent-weak
@@ -323,8 +275,9 @@ Goal: Avoid the “every AI website uses the same font” vibe. Typography shoul
 - Pick ONE mono family for code/numbers (tables, logs).
 - Don’t mix 3–4 random fonts. If it feels “designed”, it’s too much.
 
+
 4.2 Default behavior (safe)
-FONT RULES
+FONT RULES (MANDATORY)
 - Do NOT ship with “browser default” fonts (no unconfigured default stacks).
 - The project MUST explicitly set a font-family stack for UI + mono.
 - Approved UI fonts (pick ONE):
@@ -340,6 +293,7 @@ FONT RULES
 - Never pull fonts from random CDNs by default.
   - External font hosting is allowed ONLY if the user explicitly approves it.
 - If the app feels “too Inter / too AI”: switch to one of the packs below.
+
 
 4.3 “Font packs” (FREE / SAFE / HUMAN-LOOKING)
 Choose ONE pack per project unless user explicitly overrides.
@@ -388,22 +342,9 @@ These are “vibes”, not strict requirements:
 - Labels: 12–13px, 600 weight.
 - Titles: 18–28px, 600–650 is default. 700 allowed sparingly. Avoid 800/900 unless brand demands it.
 - Line-height: keep comfortable (1.35–1.6). Dark UIs need breathing room.
-
-TYPE SCALE (RECOMMENDED DEFAULTS)
-- Use a small set of sizes and reuse them (no random 15/17/19px).
-- Recommended set:
-  - XS: 12px (helper, metadata)
-  - SM: 13–14px (labels, secondary)
-  - Base: 15–16px (body, list rows)
-  - H3: 16–18px (panel titles)
-  - H2: 18–20px (section headers)
-  - H1: 22–28px (page titles only)
-- Use weight, spacing, and surface contrast before increasing font size.
-- Numbers: use tabular-nums for tables/counters where possible.
-
 - Avoid ALL CAPS UI; if used, keep it rare and small.
 
-HEADING WEIGHT + “BOLD LOOKS WEIRD” FIX
+HEADING WEIGHT + “BOLD LOOKS WEIRD” FIX (MANDATORY)
 - UI titles MUST NOT rely on heavy bold alone for emphasis.
 - Prefer Semibold over Bold:
   - Page titles: 600–650 (variable) or 600
@@ -418,6 +359,7 @@ HEADING WEIGHT + “BOLD LOOKS WEIRD” FIX
 - Sidebar brand and page title MUST have different hierarchy (page title stronger; brand calmer).
 - Do NOT use the same font-size + weight combination for both sidebar brand title and page title.
 
+
 4.6 Icons
 - Monochrome SVG icons.
 - No giant decorative icons.
@@ -425,7 +367,7 @@ HEADING WEIGHT + “BOLD LOOKS WEIRD” FIX
 - Use one icon style set (stroke weight and corner style consistent).
 - Do not mix filled + outlined icons unless deliberate and consistent.
 
-ICON CONSISTENCY
+ICON CONSISTENCY (MANDATORY)
 - Choose ONE icon set and stick to it (size grid, stroke weight, corner style).
 - Use standard sizes only: 16px (dense), 20px (default), 24px (marketing/large). Avoid random 18/22/26.
 - Do not scale icons to non-integer pixels. Keep them pixel-aligned and crisp.
@@ -433,7 +375,6 @@ ICON CONSISTENCY
   - an accessible label (aria-label)
   - a tooltip on hover/focus (short and helpful)
 
-- Icon contrast: icons should meet ~3:1 contrast against their background. If an icon must be super faint, it’s probably decorative and should be removed.
 
 ------------------------------------------------------------
 5) COMPONENT + PATTERN LIBRARY (WHAT LOOKS REAL)
@@ -450,7 +391,7 @@ Sidebar behavior (modern app feel):
 - Resizable via drag handle (subtle, only appears on hover near edge).
 - On mobile: becomes a drawer.
 
-APP ICON + FAVICON
+APP ICON + FAVICON (MANDATORY)
 - The app mark MUST be used anywhere a “logo slot” exists (sidebar header, login header, empty state brand tile).
 - The brand area MUST use a real app mark (SVG preferred) if it shows any icon at all.
 - Do NOT use a generic placeholder square/circle as the “logo”.
@@ -461,13 +402,16 @@ APP ICON + FAVICON
   - include /public/app-icon.svg (or .png) and wire it in the UI brand area
   - include favicon (favicon.svg or favicon.ico) and wire it in <head>
 
-BRAND AREA RULE (TOP-LEFT)
+BRAND AREA RULE (TOP-LEFT) (MANDATORY)
 The sidebar header/brand area may contain ONLY:
 - empty space, OR
 - logo only, OR
 - name only, OR
 - logo + name
 No taglines, subtitles, extra status text, version labels, or descriptive copy in that area.
+
+
+
 
 5.2 Tabs / view switching
 Avoid segmented pill navigation by default.
@@ -483,29 +427,14 @@ Default buttons are text-like:
 - active: slightly stronger
 Primary button only if the page has a true primary action (one per view).
 
-PRIMARY BUTTON COLOR DISCIPLINE
-
-- In DARK tool/dashboards, the default “primary” button MUST NOT be a saturated bright fill (no random blue CTA).
-
-- Default primary styling in dark mode:
-- neutral surface fill (surface2/raised) + subtle stroke, OR
-- outline + neutral fill on hover.
-
-Accent color is allowed only for:
-- links/underline/active indicators, OR
-- one true primary action only if the view clearly has a single primary job.
-
-If accent is used on a primary button:
-- keep it toned-down (not neon), and
-- do not use accent anywhere else in that viewport besides maybe a small active indicator.
-
-BUTTONS VS LINKS
+BUTTONS VS LINKS (MANDATORY)
 - Use links for navigation (route change) and external URLs. Use buttons for in-place actions.
 - Inline links MUST look like links:
   - default: normal text color or slightly accent-tinted
   - hover: underline (preferred) + small color shift
   - DO NOT use filled pill/box hover for inline links
 - Buttons MUST look clickable via container, border, or fill. Never rely on color alone.
+
 
 5.3.1 LINK STATES (EXPANDED, MANDATORY)
 - Inline links in body copy MUST be underlined by default OR on hover + focus (choose one, but be consistent).
@@ -531,7 +460,8 @@ Rules:
 - Show a partial “peek” of the next item to hint scroll.
 - Keep rails shallow: 1–3 lines of text max per item.
 
-BUTTON SIZING + TOOLBAR RULES
+
+BUTTON SIZING + TOOLBAR RULES (MANDATORY)
 - No oversized “action tiles” for normal actions (Refresh, Add, Copy, Open).
 - Default button height: 28–34px (icon buttons) / 32–36px (primary buttons).
 - Default icon size in buttons: 16–20px. Never 48–96px icons in buttons.
@@ -539,7 +469,7 @@ BUTTON SIZING + TOOLBAR RULES
 - If an action must be emphasized, use position + spacing, not size (no big squares).
 - If a big callout is needed, it must be an empty state CTA, not a toolbar control.
 
-5.3.3 BADGES / CHIPS / STATUS TAGS
+5.3.3 BADGES / CHIPS / STATUS TAGS (MANDATORY)
 
 - Badges must look like part of the design system (same radius, same stroke rules, same typography scale).
 - Badge background must be a surface token (not pure black).
@@ -555,7 +485,7 @@ BUTTON SIZING + TOOLBAR RULES
 - Focus: stronger inset stroke (NO glow).
 - Placeholder: muted, readable.
 
-FORMS + VALIDATION
+FORMS + VALIDATION (MANDATORY)
 - Every input has a visible label (top-aligned) or an accessible label. Placeholder is not a label.
 - Field sizing:
   - default height: 32–36px
@@ -574,7 +504,7 @@ FORMS + VALIDATION
 - Secondary actions (⋯, +, trash) appear on hover OR on selection (not always visible).
 - If “now playing”/active state exists, it must be distinct from selection.
 
-DATA TABLE / LIST MECHANICS
+DATA TABLE / LIST MECHANICS (MANDATORY)
 - Header row is sticky when the table body scrolls.
 - Alignment rules:
   - text left
@@ -587,20 +517,17 @@ DATA TABLE / LIST MECHANICS
   - do not “fake sort” visuals without wiring
 - Density:
   - consistent row height (no random row padding changes)
-  - ROW SIZING (RECOMMENDED):
-    - Compact: 32–36px row height, 8–10px vertical padding total
-    - Comfortable: 40–44px row height, 12–14px vertical padding total
-    - Airy: 48–56px row height, 16–20px vertical padding total
   - truncate long cells with ellipsis; show full value on hover via tooltip only when needed
 - Large datasets:
   - use pagination or infinite scroll with clear “loading more”
   - show total count or “showing X of Y” when known
 
-COLUMN WIDTH + TRUNCATION
+COLUMN WIDTH + TRUNCATION (MANDATORY)
 - Critical text columns (like Subject/Title) MUST have a min-width (e.g. 260–360px).
 - Use: overflow:hidden; text-overflow:ellipsis; white-space:nowrap for single-line rows.
 - If multi-line preview is used: clamp to 2 lines (line-clamp) and NEVER allow per-letter wrapping.
 - Never allow flex/grid to shrink important text columns below min-width just to fit action buttons.
+
 
 5.6 Inspector / details panel (right side)
 - Shows details for current selection.
@@ -613,7 +540,7 @@ COLUMN WIDTH + TRUNCATION
 - 1 primary action (e.g., “Import…”, “Create…”)
 No illustrations unless user asked.
 
-5.7.1 EMPTY STATE TYPOGRAPHY + LAYOUT
+5.7.1 EMPTY STATE TYPOGRAPHY + LAYOUT (MANDATORY)
 Empty states MUST be visually designed, not raw paragraphs.
 
 Rules:
@@ -628,7 +555,7 @@ Rules:
 - Never leave invisible overlays blocking clicks (see Overlay Safety).
 - Modal content should feel like a real product: short, clear, “Cancel / Save”.
 
-MODAL VIEWPORT CONSTRAINT
+MODAL VIEWPORT CONSTRAINT (MANDATORY)
 - Modals/drawers must fit the viewport:
   - max-height: 85vh
   - max-width: min(92vw, 960px)
@@ -637,7 +564,7 @@ MODAL VIEWPORT CONSTRAINT
 - Do not use huge icons inside modals:
   - cap hero icons to ~120–180px height
 
-MODAL ACCESS + FOCUS
+MODAL ACCESS + FOCUS (MANDATORY)
 - Open:
   - move focus into the modal (title or first interactive control)
   - trap focus inside while open
@@ -651,50 +578,25 @@ MODAL ACCESS + FOCUS
   - header and footer stay visible; ONLY the modal body scrolls
   - show a clear close button in the top-right (except where not appropriate)
 
-5.9 Toasts / notifications
-Use toasts for short confirmations and non-blocking feedback.
 
-MANDATORY RULES:
-- Pick ONE position and stick to it:
-  - Desktop: bottom-left OR bottom-right (recommended: bottom-left so it avoids top nav)
-  - “Copied” style: top-center is acceptable, but don’t mix patterns
-- Timing:
-  - success/info: auto-dismiss 3–5s
-  - errors: either longer (6–10s) OR stay until dismissed if critical
-  - hover pauses the timer (so users can read it)
-- Stacking:
-  - stack with 8–10px gap
-  - newest appears above the stack when anchored at bottom; below when anchored at top
-  - cap visible stack (e.g. 3–4) then collapse into “+2 more”
-- Actions:
-  - allow “Undo” for destructive actions when safe
-  - actions must look like links/buttons (not plain text)
-- Style:
-  - small rectangle with the same radius + stroke rules as the rest of the UI
-  - subtle shadow only if needed (no glow). Prefer raised surface token.
-  - icon optional (check/warn/error) but keep it small (16–18px) and consistent
-- Motion:
-  - quick fade/slide only (native OS vibe). Never bounce.
+5.9 Toasts / notifications
+- Small, top-right or bottom-left.
+- Auto-dismiss with pause-on-hover.
+- Don’t over-animate.
 
 5.10 Command palette (only if app benefits)
-- Shortcut:
-  - Ctrl+K / Cmd+K is the default.
-  - Optional: “/” opens it ONLY when focus is not in an input/textarea.
-- Behavior:
-  - Modal-like overlay with an input at top + a list of commands/results.
-  - Fully keyboard navigable: Up/Down, Enter to run, Esc to close.
-  - Never triggers while typing in inputs (no accidental opens).
-- UX:
-  - Show command names with clear verbs (“Open…”, “Create…”, “Switch to…”).
-  - If the app has multiple shortcuts, include a “Shortcuts” cheat-sheet (Settings → Shortcuts or “?” help).
-- Don’t add this just to look fancy: only for power-user apps (tools, editors, dashboards).
+- Ctrl+K or / to open.
+- Must not trigger while typing in inputs.
+- If present, document in Settings → Shortcuts.
+
+
 
 5.11 Images + media (only if they add information)
 - Images must earn their space (proof, context, preview). If decorative: remove.
 - Avoid default stock-photo vibes (smiling people, generic office shots) unless the domain demands it.
 - Avoid “AI illustration” vibes (3D blobs, neon gradients, abstract orbs).
 
-IMAGE QUALITY + PERFORMANCE
+IMAGE QUALITY + PERFORMANCE (MANDATORY)
 - Every image must reserve space:
   - set width + height attributes OR CSS aspect-ratio
   - never stretch images; use object-fit: cover/contain intentionally
@@ -714,42 +616,26 @@ VIDEO (OPTIONAL)
 - Always include a poster image.
 - No autoplay with sound. Respect reduced motion.
 
+
 ------------------------------------------------------------
 6) MOTION / ANIMATION (OPTIONAL BUT CAN MAKE IT FEEL HUMAN)
 ------------------------------------------------------------
 Default: minimal. Motion must communicate state or spatial change.
 
-Philosophy:
-- Use motion to support UX and cause→effect (button triggers modal, panel lives on an edge so it slides from that edge).
-- If an animation draws attention to itself, tone it down or delete it.
-
 Hard rules:
-- Respect prefers-reduced-motion (reduce/disable non-essential transitions).
-- Avoid bouncy springs unless the product is explicitly playful.
-- Prefer animating transform/opacity (avoid layout/reflow where possible).
-- Use consistent easing:
-  - Entering: ease-out (fast start, gentle stop)
-  - Exiting: ease-in (gentle start, fast end)
-  - Safe beziers: cubic-bezier(0.4,0,0.2,1) or cubic-bezier(0.2,0,0,1)
-- Direction must be consistent: open direction = close direction (reverse exactly).
-- Do NOT animate the focus ring/outline (it should appear immediately).
-- Do NOT animate error text “into existence” (no slow color tween on error states).
-- If the UI has drawers/modals/panels, include at least one spatial transition (panel slide or modal fade).
+- Respect prefers-reduced-motion (reduce/disable transitions).
+- No bouncy springs everywhere.
+- Animate only transform/opacity where possible (performance).
+- Direction must be consistent: open direction = close direction.
+- At least one spatial transition MUST exist if the UI has panels/drawers/modals (drawer slide or modal fade)
 
-6.1 Timing presets (keep these consistent)
-- Hover micro interactions: 120–180ms ease-out
-- Focus ring: instant (or <=80ms, no fancy tween)
-- Small UI changes (dropdown, accordion): 150–250ms
-- Panels/drawers: 200–300ms
-- Modals: 160–220ms (fade + slight scale, e.g. 95% → 100%)
-- Page/large section transitions (if any): <=300ms, usually just a fade
+6.1 Timing presets
+- Micro (hover/focus): 120–180ms ease-out
+- Small UI changes (expand/collapse sections): 160–220ms
+- Panels/drawers (slide in/out): 180–260ms
+- Modals (fade + slight scale): 160–220ms
 
-6.2 Purposeful patterns (recommended)
-- Panels/drawers: slide in from the edge; fade in a subtle scrim; reverse on close.
-- Modals: fade + slight scale; keep it calm and quick.
-- Hover: background-color fade or a 1–2px icon/text nudge only (no big lift/scale).
-
-6.3 “YouTube comment panel” style pattern (recommended)
+6.2 “YouTube comment panel” style pattern (recommended)
 Use for: inspector, comments, activity log, notifications.
 Behavior:
 - Panel slides in from right
@@ -757,24 +643,13 @@ Behavior:
 - Content fades in slightly after panel starts moving
 - Close reverses exactly (same direction)
 
-6.4 Sidebar collapse/expand motion
+6.3 Sidebar collapse/expand motion
 - Collapse: width shrinks + labels fade out
 - Expand: width grows + labels fade in after movement starts
 
-6.5 Loading indicators
-- Spinners: use standard CSS spin (don’t custom animate unless needed).
-- Skeleton loaders: subtle shimmer only (no bright sweeping gradients, no fast shimmer).
-
-6.6 Reduced motion handling
+6.4 Reduced motion handling
 If prefers-reduced-motion:
 - remove sliding; use instant show/hide or quick fade only.
-
-6.7 Don’t animate everything
-Use motion mainly for:
-- overlays (modals, menus, toasts)
-- structural transitions (navigation, panels)
-- gentle emphasis (e.g., highlight a newly added row by fading its background)
-Avoid animating every tiny state change (that reads “demo/template”).
 
 ------------------------------------------------------------
 7) ENGINEERING (MAKE IT WORK LIKE A REAL APP)
@@ -828,12 +703,13 @@ If it improves UX:
 - JS/CSS:
   - avoid mega-dependencies for simple pages
   - keep transitions to transform/opacity (no layout thrash)
-7.6 OVERLAY SAFETY INVARIANT
+7.6 OVERLAY SAFETY INVARIANT (MANDATORY)
 Any full-screen overlay container (modal host, toast host, command palette) using:
   position: fixed; inset: 0;
 MUST be non-interactive when closed.
 Never rely on opacity alone.
 Use [hidden]{display:none} OR pointer-events:none in closed state.
+
 
 - Also remove closed overlays from the tab order and accessibility tree:
   - prefer [hidden]{display:none} or inert
@@ -841,7 +717,7 @@ Use [hidden]{display:none} OR pointer-events:none in closed state.
 - Backdrop must never block clicks when the modal/drawer is closed.
 - Keep overlay hosts at the root level (direct child of body/app root), not inside scrolling panes.
 
-7.6.1 DRAWER / MENU CLOSE CONTRACT
+7.6.1 DRAWER / MENU CLOSE CONTRACT (MANDATORY)
 Any drawer/right panel/menu that opens over content MUST be closable via ALL of:
 - Close button (top-right, visible)
 - Esc key
@@ -855,21 +731,8 @@ Implementation rules:
 - Backdrop click must close ONLY when click target is the backdrop itself (not inside the panel).
 - Ensure no “dead overlay” remains after close (z-index / opacity is not enough).
 
-7.6.2 Z-INDEX LADDER
-- Define a simple z-index scale (tokens), then never ad-hoc.
-  Example:
-  - base content: 0
-  - sticky header: 10
-  - dropdown/menu: 100
-  - tooltip: 200
-  - drawer/sidepanel overlay: 300
-  - modal: 400
-  - toast host: 500
-- Never allow background tooltips/menus to appear above a modal.
-- Avoid stacking modals. Default rule: only one top-level modal open at once.
-- If a modal triggers another confirmation, prefer in-modal confirm state over “modal on modal”.
 
-7.7 SCROLL CONTAINMENT
+7.7 SCROLL CONTAINMENT (MANDATORY)
 - The page background (body) should not be the primary scroller in app-like layouts.
 - Use a fixed app shell: header + main area, and make only the main content panes scroll.
 - Sidebar, main content, and inspector panels should scroll independently when needed.
@@ -879,50 +742,30 @@ Implementation rules:
 ------------------------------------------------------------
 8) ACCESSIBILITY + UX SANITY
 ------------------------------------------------------------
-Minimum:
+Minimum (MANDATORY):
 - Keyboard navigation works everywhere:
   - Tab order follows visual order
-  - Visible focus indicator on every interactive element (no neon glow, but clearly visible)
-  - No keyboard traps
-  - Esc closes modals/drawers/menus
-  - On close: focus returns to the trigger that opened it
-- Touch / click targets are not tiny:
-  - Minimum 24x24 CSS px (or equivalent padding/spacing)
-  - On mobile, prefer ~44px-tall targets for primary controls
-- Semantic HTML first (enhance, don't redefine):
-  - Buttons are <button>, links are <a>, inputs are real <input>/<select>/<textarea>
-  - Headings follow order (h1 then h2, etc), no random jumps
-  - Use proper regions: header/nav/main/aside/footer
-  - Nav lists are real <ul>/<li>
-- Skip link:
-  - First focusable thing in DOM:
-    <a href="#main" class="skip-link">Skip to main content</a>
-  - It is visually hidden until focused (then becomes visible)
-  - Main content container has id="main"
-- Forms:
-  - Every input has a visible label (for= / id= or wrapping label)
-  - Errors are specific and clear, and announced:
-    - aria-describedby points to help/error text
-    - Use aria-live="polite" for dynamic error summaries / toasts when appropriate
-- Icons and icon-only buttons:
-  - Icon-only controls must have aria-label (and a tooltip if useful)
-  - Do not rely on an icon alone for meaning if it's not universally obvious
-- Images:
-  - Meaningful images must have alt text
-  - Decorative images must use alt="" and aria-hidden="true"
-- Hover-only UI is forbidden:
-  - Hover can reveal secondary actions, but everything must be reachable by click/tap/keyboard too
-  - Hover/focus popups must be dismissible (Esc) and must not block interaction unexpectedly
+  - visible focus indicator on every interactive element (no glow, but clearly visible)
+  - no keyboard traps (Esc closes modals, focus returns correctly)
+- Targets are not tiny:
+  - interactive targets at least 24x24 CSS px (or provide equivalent spacing)
+- Use proper semantics:
+  - buttons are <button>, links are <a>
+  - forms have labels, fieldsets when grouped, and meaningful error messages
+  - headings follow order (h1 then h2, etc)
+- Landmarks + navigation:
+  - use semantic regions (header/nav/main/aside/footer)
+  - provide a “Skip to content” link for keyboard users
+- Tooltips, menus, and hover content:
+  - hover is not the only way to discover actions
+  - content that appears on hover/focus must be dismissible and must not block interaction
 - Contrast sanity:
-  - WCAG AA target: >= 4.5:1 for normal text, >= 3:1 for large text and UI graphics
-  - Do not use color alone to communicate status (add text/icon/shape)
+  - muted text still readable
+  - do not use color alone to communicate status
 
-Reduced motion:
-- Respect prefers-reduced-motion:
-  - reduce/disable non-essential transitions, parallax, auto-scrolling
-  - keep essential state changes instant or subtle
+Reduced motion (MANDATORY):
+- Respect prefers-reduced-motion (reduce/disable non-essential transitions and parallax).
 ------------------------------------------------------------
-
 9) MICROCOPY (ANTI-TEMPLATE LANGUAGE)
 ------------------------------------------------------------
 Tone: short, functional, calm.
@@ -939,46 +782,35 @@ Rules:
 ------------------------------------------------------------
 10) RESPONSIVE (NO DESKTOP-ONLY DASHBOARD)
 ------------------------------------------------------------
-Breakpoints (guide, not religion):
-- Large desktop: >= 1200px
-- Desktop: 1100–1199px
-- Tablet: 800–1099px
-- Mobile: < 800px
-Test at ~375–400px and at ~1440px.
+Breakpoints:
+- Desktop >= 1100px
+- Tablet 800–1099px
+- Mobile < 800px
 
 Behavior:
-- Sidebar becomes a drawer on mobile (hamburger in top bar).
-- Two-column layouts stack on mobile (secondary below primary) OR switch views:
-  - list view -> tap item -> detail view (separate page or overlay/bottom sheet)
-- Keep primary actions reachable:
-  - sticky toolbar OR move primary action into a top bar
-  - collapse secondary actions into an overflow menu
+- Sidebar becomes drawer on mobile.
+- Two-column stacks (details below list).
+- Keep actions reachable (toolbar sticks or moves smartly).
 
-MOBILE REALITY:
+
+MOBILE REALITY (MANDATORY)
 - Anything that requires hover MUST have an equivalent tap/selection behavior.
+- Toolbars:
+  - keep primary actions reachable without scrolling back to the top
+  - collapse secondary actions into an overflow menu
 - Panels:
-  - inspector panel becomes stacked content, a bottom sheet, or a full-screen detail page
+  - inspector panel becomes a bottom sheet or stacked section on mobile
   - avoid 3+ columns on tablet; prefer 1–2
 - Tables:
-  - Best: convert each row to a stacked "record" layout (label + value) and use a details view
-  - Acceptable fallback: horizontal scroll, but:
-    - show a visual hint that it scrolls (fade/shadow at edge)
-    - keep header sticky if possible
-    - never hide overflow with no cue
-- Forms:
-  - use full-width inputs on mobile
-  - keep font-size >= 16px to avoid iOS auto-zoom
-  - increase padding so targets are easy to tap
-  - prefer appropriate input types (email, date, number) to get native keyboards
-- Text zoom resilience:
-  - layout must survive 200% text size (avoid fixed heights on text containers)
-- Images/media:
+  - on mobile, switch to list rows with key fields and a details view (do not force horizontal scrolling)
+- Images:
   - never overflow; use max-width: 100% and preserve aspect ratio
-------------------------------------------------------------
 
+
+------------------------------------------------------------
 11) DELIVERY STANDARD (ANTI-PROTOTYPE)
 ------------------------------------------------------------
-SHIP MODE
+SHIP MODE (MANDATORY)
 - The delivered UI must look like a ready public product, not a dev demo.
 - Do NOT include developer-only UI in the product surface:
   - no “Tools / Diagnostics / Self-Test / Simulate error/loading” buttons
@@ -992,7 +824,7 @@ SHIP MODE
 - Any nav item must route to a unique view OR be removed.
 - If a view is not implemented, hide it (don’t show disabled nav unless there’s a real reason and explanation).
 
-REFRESH / SYNC BUTTON RULE
+REFRESH / SYNC BUTTON RULE (MANDATORY)
 - Do NOT add a “Refresh” button unless it triggers a meaningful, user-visible change:
   - re-fetch data, re-run a sync, or update a “Last updated” timestamp with a visible loading state.
 - If Refresh exists, it MUST:
@@ -1002,7 +834,8 @@ REFRESH / SYNC BUTTON RULE
 - Do NOT include Refresh as a realism prop if the app is purely local/static.
 - “Refresh” MUST NOT only re-render UI; it must change data freshness state (timestamp/loading) at minimum.
 
-KEYBOARD HINT DISCIPLINE
+
+KEYBOARD HINT DISCIPLINE (MANDATORY)
 - Do NOT permanently show keyboard shortcut hints across the main UI (e.g., “Esc clear”, “Enter open”).
 - Shortcut education MUST live in ONE of:
   1) Settings → Shortcuts
@@ -1014,81 +847,78 @@ KEYBOARD HINT DISCIPLINE
   - Settings
   - a modal/drawer footer for that modal/drawer only
 
+
 ------------------------------------------------------------
 12) CRITIC + QA PASSES (NO EXCEPTIONS)
 ------------------------------------------------------------
-PASS A — Visual Critic (ANTI-TEMPLATE)
+PASS A — Visual Critic
 - Any glow? remove.
 - Borders too strong? reduce/remove.
 - Too many boxes/cards? remove 30–40%.
-- Symmetry/template blocks? break them (vary content, adjust layout).
-- Generic copy? rewrite in domain language.
+- Symmetry/template blocks? break them.
+- Generic copy? rewrite.
 
 AI-TELL QUICK TEST (run last)
-- If you can describe the page as "dashboard-ish", it's too generic -> make it more domain-shaped.
-- If it's a grid of equal cards -> convert to list + inspector.
+- If you can describe the page as “dashboard-ish”, it’s too generic -> make it more domain-shaped.
+- If it’s a grid of equal cards -> convert to list + inspector.
 - If accent appears in >3 places in one viewport -> reduce it.
-- If too many buttons look equally important -> demote most to text buttons / menus.
-- If microcopy has buzzwords -> rewrite to functional, specific language.
+- If too many buttons look equally important -> demote most to text buttons.
+- If microcopy has any buzzwords -> rewrite to functional domain language.
 
-PASS B — Functional QA (STATE + WIRES)
-- Click every interactive thing:
-  - every button/link does something real (or is hidden/disabled with a clear reason)
-  - nav items route somewhere meaningful (no dead routes)
-  - forms validate, show errors, and submit
-  - toggles actually toggle state
-  - selection updates UI (selected row, details panel, counts, etc.)
-- Modals/drawers/menus:
-  - open/close works, Esc works, click-outside works (when applicable)
-  - focus moves into the modal on open and returns to trigger on close
-  - no invisible overlay blocks clicks when closed (see Overlay Safety)
-  - body scroll locks while modal is open
-- Keyboard pass:
-  - Tab/Shift+Tab can reach every control
-  - Enter/Space activates controls appropriately
-  - focus ring is always visible
+PASS B — Layout
+- Alignment clean.
+- Spacing scale consistent.
+- No giant empty panels.
+- Search/toolbar aligned to content grid.
 
-PASS C — Accessibility + Motion
-- Skip link exists and works.
-- Semantic HTML where possible; ARIA only when needed.
-- Icon buttons have aria-label.
-- Meaningful images have alt; decorative images use alt="".
-- prefers-reduced-motion is respected (non-essential motion reduced/disabled).
+PASS C — Interaction
+- Hover/active/focus consistent.
+- Selected vs “active/now playing” distinct.
+- Sidebar collapse and panel slide behave correctly.
 
-PASS D — Responsive + Final Sanity
-- Resize quickly: nothing overlaps, no text spills, no broken grids.
-- Mobile view:
-  - drawer menu works (open/close/scroll)
-  - no hover-only features
-  - tables degrade gracefully (stacked rows or scroll with hint)
-  - touch targets are usable
-- Console check: no red errors, no missing assets (no 404s).
-- Meta sanity:
-  - <meta name="viewport" content="width=device-width, initial-scale=1">
-  - page titles set, favicon present if branding exists
-- No placeholder filler:
-  - no lorem ipsum, no "Item 1", no fake demo banners
-  - if something isn't implemented: hide it or disable with clear copy
+PASS D — Functional QA (“Dead UI” smoke test)
+On EACH page:
+- Click nav
+- Use primary action
+- Use search
+- Open/close any drawers/modals
+- Refresh (state still consistent)
 
-B3) Basic realism (server / errors)
+If any click doesn’t register: suspect overlays/z-index/pointer-events first.
+
+============================================================
+APPENDIX: BACKEND KEY (ONLY IF SERVER IS USED)
+============================================================
+B1) Avoid backend “AI smells”
+- microservices/over-architecture
+- fake enterprise boilerplate
+- auth/JWT “just because”
+- unused dependencies
+- vague “Something went wrong” everywhere
+
+B2) Preferred backend vibe
+- small, boring, correct
+- minimal files, clear naming
+
+B3) Basic realism
 - validate inputs (400)
 - not found (404)
 - real server errors only (500)
-- log with context, don't spam
+- log with context, don’t spam
 
 B4) Simple security baseline
 - secrets in .env
 - CORS only if needed
 - file uploads: size/type checks
 - never trust client input
-------------------------------------------------------------
 
-13) DELIVERY METHOD
+------------------------------------------------------------
+13) DELIVERY METHOD (MANDATORY)
 ------------------------------------------------------------
 Default delivery:
-- Provide ONE downloadable ZIP containing the full project with the exact file tree.
+- Provide ONE downloadable ZIP containing the full project wi
 
-ASSET PIPELINE
+ASSET PIPELINE (MANDATORY)
 - Default: keep ALL images/icons local in the ZIP.
   - Place them in /public/assets (or /assets for pure static) with predictable subfolders:
     - /public/assets/icons/
@@ -1097,11 +927,10 @@ ASSET PIPELINE
 - Naming:
   - kebab-case only (no spaces), include size if relevant (cover-640.jpg, avatar-96.png).
   - Do NOT use random filenames like “image123.png”.
-- Inventory files:
+- Inventory files (MANDATORY if any external assets are used):
   - ASSETS.md: table with (file, source URL, license, author, modifications)
   - ATTRIBUTION.md: human-readable attribution text (only if license requires)
-  - LICENSES.md (optional): note any font/icon library licenses if relevant
-- Performance + quality:
+- Performance + quality (MANDATORY):
   - Every <img> MUST include width + height attributes OR CSS aspect-ratio to prevent layout shift.
   - Do NOT lazy-load the hero/LCP image; do lazy-load images below the fold.
   - Use responsive images (srcset/sizes) for large thumbnails/hero images when possible.
@@ -1117,9 +946,8 @@ SAFE IMAGE SOURCES (WHEN YOU NEED REAL PHOTOS)
 - Unsplash (free license; attribution appreciated)
 - Pexels (free license; attribution appreciated)
 Always verify license and include attribution when required.
-- Prefer images that are free of attribution requirements, or use simple placeholders you generate yourself to avoid licensing/legal surprises.
 
-In chat, show the exact file tree.
+th the exact file tree.
 - Also print the file tree in chat (paths only), then provide the download link.
 - Do NOT paste full file contents into chat unless the user explicitly asks for inline files or a non-zip delivery.
 
@@ -1128,7 +956,8 @@ ZIP rules:
 - Name the zip descriptively (project-name.zip).
 - Include a short README with run instructions and (if used) image attribution.
 
-DELIVERY NOTES
+
+DELIVERY NOTES (MANDATORY IN CHAT)
 After the file tree + ZIP link, include a short “Run + Customize” block with:
 - How to run (exact steps; e.g., open index.html or use Live Server)
 - Where to edit content/data (exact file + search anchors)
@@ -1137,6 +966,7 @@ After the file tree + ZIP link, include a short “Run + Customize” block with
 - Any required IDs/links to replace (what + where)
 - Known limitations (1–3 bullets max)
 Keep it under ~12 lines. No long explanations.
+
 
 ------------------------------------------------------------
 14) ASSETS (ICONS/LOGOS/IMAGES) (PREFERRED ORDER)
@@ -1610,41 +1440,25 @@ J1) Visual QA
 - One radius system, one stroke system, one icon style.
 
 J2) Interaction QA
-- Every visible control works (no dead buttons, no fake filters/sorts).
-- Hover, focus, active, disabled states are consistent and obvious.
-- Selection state is clear (active nav, selected row, active tab).
+- Every visible control works.
+- Hover, focus, active, disabled states are consistent.
+- No dead buttons, no fake filters/sorts.
 - Modals/drawers:
   - open/close works, Esc works, focus trap works
-  - focus returns to trigger on close
   - cannot scroll background while open
   - cannot click through invisible overlays
-- Console: no red errors, no 404s.
 
 J3) Content QA
-- No lorem ipsum, no placeholder avatars, no fake "demo" badges.
+- No lorem ipsum, no placeholder avatars, no fake “demo” badges.
 - Real microcopy (short, specific). Domain nouns and verbs.
 - Empty, loading, and error states exist and are non-cute and functional.
 
 J4) Accessibility QA
-- Full keyboard pass (Tab, Shift+Tab, Enter, Space, Esc).
-- Skip link exists and works.
-- Targets are not tiny (24x24 minimum or spaced; mobile targets feel tappable).
+- Full keyboard pass (Tab, Shift+Tab, Enter, Esc).
+- Targets are not tiny (24x24 minimum or spaced).
 - Headings and landmarks are present.
-- Icon-only buttons have aria-label.
-- Meaningful images have alt; decorative images use alt="".
-- Contrast meets WCAG AA targets (4.5:1 normal text, 3:1 large + UI graphics).
 
-J5) Responsive QA
-- Test at phone width (~375–400px) and desktop (~1440px).
-- Sidebar becomes drawer on mobile; drawer scrolls and closes correctly.
-- Two-column stacks or switches views; nothing is squished.
-- Tables degrade gracefully (stacked rows or scroll with hint).
-- No hover-only critical actions.
-
-J6) Performance QA (practical)
+J5) Performance QA (practical)
 - No visible layout shift while loading.
 - Images are not huge; hero loads fast.
 - Scroll stays smooth with large lists.
-- Optional: quick Lighthouse sanity / slow network throttle check.
----------------------------------------------------------
-
