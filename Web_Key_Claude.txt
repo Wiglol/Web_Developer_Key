@@ -1,0 +1,595 @@
+WIGLO — Web_Key (Claude Edition v1)
+============================================================
+THIS FILE IS FOR THE AI ONLY.
+Read every section before writing a single line of code.
+This key was authored specifically for Claude and assumes Claude's
+reasoning, code quality, and design judgment. Rules are tighter here.
+
+WHAT THIS KEY COVERS
+- General web apps, dashboards, tools (sections 0–12)
+- Portfolio / creative / CV sites (section 13)
+- 3D + visual spectacle sites (section 14)
+- Packaging and delivery (section 15)
+
+----------------------------------------------------------------
+RULE PRIORITY (MANDATORY)
+----------------------------------------------------------------
+HARD RULES: MUST / MUST NOT / DO NOT / NEVER / REQUIRED.
+DEFAULTS: SHOULD / Avoid / Prefer — follow unless explicitly overridden.
+
+When rules conflict, resolve in this order:
+  (1) Real product feel — ship-ready, not a demo or prototype
+  (2) Clarity + usability + all interaction states wired
+  (3) Correctness — no dead UI, no console errors, no broken state
+  (4) Theme consistency — tokenized palette; no one-off hex values
+  (5) Features last — avoid feature soup; do less, do it right
+
+NEVER justify these rules in the product UI. Just implement them.
+If it still looks like a template at 100% zoom: simplify harder.
+
+----------------------------------------------------------------
+0) PRIME DIRECTIVE — HUMAN-GRADE DELIVERY (MANDATORY)
+----------------------------------------------------------------
+Before finalising any page/component, run all four passes:
+
+PASS A — CRITIC ("Kill AI smell")
+- Remove: artificial glows, heavy drop shadows, gratuitous card borders,
+  glass blur, neon gradients, generic hero + features + CTA layouts.
+- Kill "card soup": if a view has more than ~6 panel cards simultaneously,
+  you have failed. Replace with whitespace, dividers, and typography.
+- Kill decorative icons that add no meaning.
+- Remove anything that makes the screenshot look like a Figma community template.
+- Rule of thumb: if you'd find it on ThemeForest, remove it.
+
+PASS B — FUNCTIONAL QA ("No dead UI")
+- Every clickable element MUST do something visible.
+- Nav items must route somewhere real or be removed.
+- Filters, toggles, modals, drawers, carousels, form validation,
+  close behaviours — all must be wired.
+- If something is not yet implemented: remove it, hide it, or label it
+  explicitly "Coming soon" — do NOT leave a dead button.
+
+PASS C — ACCESSIBILITY + POLISH
+- Keyboard-only pass: focus visible, logical tab order, ESC closes overlays,
+  Enter activates buttons.
+- prefers-reduced-motion: all non-essential animations must be suppressed.
+- Contrast: body text meets AA minimum (4.5:1), large text meets AA (3:1).
+- Touch targets: minimum 24×24 CSS px; primary controls prefer ~44px on mobile.
+- Semantic HTML: nav, main, header, footer, section, article, aside.
+- ARIA only where native HTML is insufficient.
+- Meaningful images have descriptive alt text; decorative images use alt="".
+- <meta name="viewport" content="width=device-width, initial-scale=1"> is required.
+- Skip-to-content link on content-heavy pages.
+
+PASS D — "NO BOX CHECK"
+- Count visible rounded-rectangle panels in the viewport.
+- If more than ~6: FAIL. Remove until you're below the threshold.
+- Replace boxes with: spacing, hairline dividers, typography hierarchy.
+- This pass is never optional, even on portfolio or dark-mode sites.
+
+----------------------------------------------------------------
+1) PAGE ARCHETYPES — PICK ONE PER PAGE
+----------------------------------------------------------------
+Commit to exactly ONE archetype. Do not blend.
+
+A) TOOL / DASHBOARD
+   Sidebar + list/table + detail panel (or two-pane).
+   Dense but readable. Minimal chrome.
+
+B) CATALOG / STORE / MEDIA
+   Rails + grid/list + filters + detail page.
+   Stateful sorting and filtering. Browse-first patterns.
+
+C) CONTENT / DOCS / NEWS
+   Readable column (~680–820px). Optional unboxed aside.
+   Asides are text modules separated by dividers — not card stacks.
+
+D) LANDING / MARKETING
+   ONLY when explicitly requested. Hero + single-purpose CTA.
+   Still subject to all anti-box rules.
+
+E) PORTFOLIO / CREATIVE / CV  ← NEW
+   See section 13 for the full portfolio ruleset.
+   This archetype unlocks 3D backgrounds, scroll animations,
+   expressive typography, and visual spectacle — with specific guardrails.
+
+----------------------------------------------------------------
+2) ANTI-BOX SYSTEM (THE CORE LOOK)
+----------------------------------------------------------------
+Problem: Boxes/cards everywhere = template/AI look.
+Real products use: whitespace, typography hierarchy, dividers, rhythm.
+
+2.1 CARD QUOTA (HARD)
+If a view shows more than ~6 panel cards simultaneously: you are wrong.
+Cards are only allowed for:
+  (1) Clickable entity tiles (products, articles, project thumbnails)
+  (2) Raised overlays (modals, menus, toasts)
+  (3) Truly distinct "object" components (pricing table, promo unit)
+
+2.2 FORBIDDEN BOX TRAITS (HARD)
+DO NOT:
+- Wrap every section in a rounded-rectangle background.
+- Stack multiple right-rail cards with shadows.
+- Add visible borders around every container.
+- Add glow shadows on dark mode.
+- Put a panel background behind long-form text.
+
+2.3 REPLACEMENTS (DEFAULT)
+Instead of a card, use one of:
+- Section heading + hairline divider + unboxed content block
+- Row list with hover fill (no outer border)
+- Inset callout: left border line + very subtle tint (not a rounded card)
+- Two-column layout with a thin vertical divider
+- Sticky text-only aside separated by spacing, not a card stack
+- Inline chips/tags (minimal; never chip soup)
+
+2.4 SIDEBAR / RIGHT RAIL (HARD BAN ON BOXES)
+Sidebar modules MUST be: heading + short list, separated by whitespace
+and a top divider. NO rounded rectangles, NO shadow, NO panel background.
+
+2.5 CONTENT PAGES (HARD)
+Main text column sits on the page background, not inside a content card.
+Readable width, spacing, typographic hierarchy, minimal rules.
+
+2.6 DASHBOARDS (HARD)
+At most ONE distinct surface region (e.g., sidebar) + main canvas.
+Tables/rows + inline separators + one details panel. No widget cards.
+
+----------------------------------------------------------------
+3) LAYOUT + RHYTHM
+----------------------------------------------------------------
+Content pages: comfortable reading width ~680–820px.
+App pages: responsive max-width; allow density on large screens.
+Spacing: use a single tokenised scale (e.g., 4/8/12/16/24/32/48/64/96).
+No random spacing values invented outside the scale.
+Alignment: use grids. Misalignment is usually the problem, not missing boxes.
+Dividers: hairline separators, subtle contrast — especially in dark mode.
+Sticky elements: allowed when they help browsing; must not trap content.
+
+----------------------------------------------------------------
+4) COLOR SYSTEM (TOKENS ONLY — NO IMPROVISED COLORS)
+----------------------------------------------------------------
+Use CSS custom properties for all colors. Never hardcode hex in components.
+
+4.1 SURFACE LADDER (MANDATORY)
+Define these tokens minimum:
+  --bg            (page background)
+  --surface-1     (slightly raised: nav, sidebar)
+  --surface-2     (menus, modals)
+  --surface-3     (popovers, tooltips)
+  --stroke        (borders/dividers, low alpha)
+  --text          (primary text)
+  --muted         (secondary text)
+  --accent        (primary action, active state, link hover)
+  --accent-weak   (accent with ~15% opacity — for backgrounds/badges)
+
+Only overlays get real elevation. Content areas stay flat.
+
+4.2 REFERENCE PALETTES (PICK ONE FAMILY — DO NOT MIX)
+
+FAMILY A — COOL NEUTRAL (Discord-style, safe default for apps)
+  --bg:        #1e1f22
+  --surface-1: #2b2d31
+  --surface-2: #313338
+  --hover:     #383a40
+  --text:      #dbdee1
+  --muted:     #b5bac1
+
+FAMILY B — DEEP DARK (YouTube-style, content-forward)
+  --bg:        #0f0f0f
+  --surface-1: #181818
+  --surface-2: #212121
+  --stroke:    #2a2a2a
+  --text:      #ededed
+  --muted:     #aaaaaa
+
+FAMILY C — WARM NEUTRAL (Cozy/human, chess-like)
+  --bg:        #2c2b29
+  --surface-1: #343231
+  --surface-2: #3c3a39
+  --text:      #f0f0ee
+  --muted:     #bcb8b0
+
+FAMILY D — PORTFOLIO DARK LUXE  ← matches the CV example
+  --bg:        #0a0a0a
+  --surface-1: #141414
+  --surface-2: #1a1a1a
+  --stroke:    rgba(255,255,255,0.08)
+  --text:      #e8e8e8
+  --muted:     #a0a0a0
+  --accent:    #d4a574   (warm gold)
+  --accent-weak: rgba(212,165,116,0.15)
+  Note: swap accent to #06b6d4 (ocean), #10b981 (forest),
+        or #f97316 (sunset) for theme variants.
+
+FAMILY E — CLEAN LIGHT (App-store / Google Play style)
+  --bg:        #f6f7f8
+  --surface-1: #ffffff
+  --surface-2: #f1f3f5
+  --stroke:    rgba(10,12,16,0.10)
+  --text:      #0f1216
+  --muted:     rgba(15,18,22,0.70)
+  --accent:    #1a73e8
+  --accent-weak: rgba(26,115,232,0.16)
+
+4.3 ACCENT DISCIPLINE
+Accent is for: primary CTA, active state, link hover, selection indicator.
+If you see accent color in more than ~4 places on screen at once: over-used.
+Avoid default bootstrap-blue-on-dark. Use muted/warm accents.
+
+4.4 SHADOWS
+Dark mode: shadows must be barely visible or absent.
+Use shadows only for overlays (modals, dropdowns), not for every card.
+If a shadow looks like a glow: remove it.
+
+----------------------------------------------------------------
+5) TYPOGRAPHY + ICONS
+----------------------------------------------------------------
+5.1 FONT PACKS (PICK ONE — DO NOT MIX FAMILIES)
+
+PACK A — SYSTEM NATIVE (most human, least template-y)
+  UI: system-ui / -apple-system / Segoe UI / Roboto / Helvetica / Arial
+  Code: ui-monospace / Menlo / Consolas
+  Best for: tools, dashboards, internal apps.
+
+PACK B — DEV TOOL (sharp, utilitarian, VS Code-ish)
+  UI: Geist OR IBM Plex Sans OR Source Sans 3
+  Code: JetBrains Mono OR IBM Plex Mono
+  Best for: editors, consoles, power-user apps.
+
+PACK C — CONTENT (clean, readable, Google-feel)
+  UI: Roboto OR Google Sans
+  Code: Roboto Mono
+  Best for: media, feeds, content-heavy UIs.
+
+PACK D — WARM / COZY
+  UI: Atkinson Hyperlegible OR Noto Sans
+  Best for: community, hobby tools, "cozy dark" apps.
+
+PACK E — MODERN / CRAFTED (personality without startup-landing vibe)
+  UI: Manrope OR Work Sans OR Space Grotesk (headings only)
+  Code: JetBrains Mono
+  Best for: portfolios, agencies, polished product sites.
+
+PACK F — PORTFOLIO EDITORIAL  ← used in the CV example
+  Display (headings): Playfair Display OR Cormorant Garamond OR DM Serif Display
+  UI (body): Work Sans OR Inter OR Manrope
+  Code: none needed
+  Best for: portfolios, CVs, personal sites, creative agencies.
+  Note: serif display + sans body creates a "designed" editorial feel.
+
+5.2 TYPE SCALE
+Body: 14–16px, line-height 1.45–1.7 (content) or 1.3–1.45 (UI).
+Labels: 12–13px, weight 500–600.
+Headings: 18–28px for UI; 36–72px for editorial/portfolio hero sections.
+Use weight contrast deliberately: regular body, semibold/bold headings.
+
+5.3 RULES
+- Never ALL CAPS except small data labels (e.g., "YRS EXP").
+- Do not remove font-family from the project — always set one.
+- font-display: swap or optional on web fonts.
+- Preload at most ONE primary font file.
+
+5.4 ICONS
+- Monochrome SVG icons, consistent stroke weight and corner radius.
+- One icon family per project (Lucide, Phosphor, Heroicons — pick one).
+- No giant decorative icons.
+- Icon-only buttons MUST have aria-label and a tooltip.
+
+----------------------------------------------------------------
+6) COMPONENT BEHAVIOUR (REAL APP FEEL)
+----------------------------------------------------------------
+6.1 NAVIGATION
+Active states visible. If a section is empty: provide empty state content.
+Never show a nav item that leads to a blank page.
+
+6.2 BUTTONS / LINKS
+Buttons perform actions. Links navigate. Do not swap semantics.
+Icon-only buttons: aria-label + tooltip always.
+Hover/focus: clear but not bouncy.
+One true primary CTA per view maximum.
+
+6.3 FILTERS / SORTING
+Must update results statefully. Provide "clear filters."
+Show result count and/or applied filter chips.
+
+6.4 TABLES / LISTS
+Rows with hover fill. Selected state stronger than hover.
+Secondary actions appear on hover or selection — not permanently visible.
+Data table rules:
+- Header row sticky when body scrolls.
+- Text: left. Numbers: right (tabular figures). Actions: right.
+- Sort affordance on hover; active sort clearly indicated.
+- Consistent row height. Truncate long cells with ellipsis + tooltip.
+- Large datasets: paginate or infinite scroll with "loading" feedback.
+
+6.5 MODALS / DRAWERS
+Must: trap focus, close on ESC, close button visible, backdrop closes modal.
+Must not: overflow viewport.
+
+6.6 TOASTS / NOTICES
+Short, dismissible or auto-dismiss. Respect prefers-reduced-motion.
+
+6.7 EMPTY / LOADING / ERROR STATES (ALL THREE REQUIRED)
+Loading: skeleton or spinner with label text.
+Empty: one calm line of copy + one primary action.
+Error: clear message + retry option.
+
+6.8 RAILS / CAROUSELS (HARD)
+Never auto-play. Arrow controls on desktop (keyboard-focusable).
+Show partial next item to hint scrollability.
+
+----------------------------------------------------------------
+7) MOTION + ANIMATION (GENERAL SITES)
+----------------------------------------------------------------
+Motion must communicate state or spatial change — never just decoration.
+
+Defaults (GENERAL apps and tools):
+- Short fades and small slides (120–220ms).
+- No bouncy springs unless the product is explicitly playful.
+- Animate transform/opacity only — avoid layout thrash.
+- Stagger animations: no more than 3–4 sequential steps visible at once.
+
+Suppress with prefers-reduced-motion:
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
+----------------------------------------------------------------
+8) MICROCOPY + CONTENT REALISM
+----------------------------------------------------------------
+Use realistic data variability: long/short titles, missing images, edge cases.
+Avoid: "Lorem ipsum", "Amazing product", "Next-gen solution."
+Good microcopy: "Try again", "No results for X", "Clear all filters."
+Bad microcopy: "Unlock", "Revolutionary", "Boost your workflow."
+
+----------------------------------------------------------------
+9) ACCESSIBILITY (MINIMUM BAR — NON-NEGOTIABLE)
+----------------------------------------------------------------
+- Semantic HTML: nav, main, aside, header, footer, section.
+- Skip-to-content link on content-heavy pages.
+- Focus outlines: never remove without replacing with an equivalent.
+- Touch targets: minimum 24×24 CSS px; prefer ~44px on mobile.
+- ARIA: only where native HTML is insufficient.
+- Alt text: meaningful images described; decorative images alt="".
+- Keyboard-friendly: filters, carousels, modals all reachable.
+
+----------------------------------------------------------------
+10) STATE + ROUTING REALISM
+----------------------------------------------------------------
+Single source of truth for: selectedId, activeView, filters, sidebar state,
+panel open/closed, any "active" concept.
+UI derives from state. Never "last click" UI.
+Persistence: use localStorage for theme, filters, sidebar width when useful.
+
+Routing:
+- Multi-page: real pages or hash routing.
+- Single-page: maintain state; restore on back/forward where reasonable.
+
+----------------------------------------------------------------
+11) ENGINEERING HYGIENE
+----------------------------------------------------------------
+- No console errors in the shipped product.
+- No dead code, no placeholder copy, no "TODO" visible to users.
+- Set real <title>, <meta description>, and favicon.
+- Z-index ladder (define once, never ad-hoc):
+    base: 0 | sticky: 10 | dropdown: 100 | tooltip: 200
+    drawer: 300 | modal: 400 | toast: 500
+- Overlay safety: closed overlays must be display:none or inert.
+  Never rely on opacity:0 alone — it stays in the tab order.
+- Scroll containment: only content panes scroll; shell (header, nav) is fixed.
+- Performance:
+    Reserve image space (width/height or aspect-ratio) to avoid layout shift.
+    Lazy-load below-fold images. Do NOT lazy-load the hero/LCP image.
+    Avoid heavy blur (backdrop-filter) by default.
+    Avoid mega dependencies for simple pages.
+    Paginate or virtualise lists over ~200 rows.
+- Keyboard drawer close contract: close button + ESC + backdrop click + re-trigger.
+
+----------------------------------------------------------------
+12) DELIVERY STANDARD (ANTI-PROTOTYPE)
+----------------------------------------------------------------
+The shipped UI must look like a public product, not a dev demo.
+
+DO NOT INCLUDE in the product surface:
+- "Simulate error / loading" buttons.
+- Debug panels or always-visible dev notes.
+- Permanent keyboard hint chips (e.g., "Press / to search").
+- Dead nav items that lead nowhere.
+
+Keyboard hints live ONLY in: Settings → Shortcuts, a Help popover,
+a command palette help section, or a dismissible first-run tip.
+
+Refresh / Sync button: only if it triggers a visible data change.
+Must: disable while running, show loading feedback, show "Last updated" time.
+
+Any nav item must route to a unique, real view — or be hidden.
+
+
+----------------------------------------------------------------
+14) 3D BACKGROUNDS + VISUAL SPECTACLE — TECHNICAL GUIDE 
+----------------------------------------------------------------
+This section explains exactly how to implement the floating 3D geometric
+background seen in the reference CV. It uses Three.js.
+A standalone, more detailed guide is in: WIGLO_3D_Background_Guide.txt
+
+14.1 OVERVIEW
+The effect: semi-transparent wireframe 3D shapes (torus, octahedron,
+icosahedron, tetrahedron) float and slowly rotate in a full-viewport canvas
+behind all content. The camera subtly follows the mouse. Scrolling moves
+the camera forward. Sections trigger opacity pulses on the shapes.
+Color matches the accent palette. Opacity is intentionally low (0.1–0.2)
+so it enhances rather than distracts.
+
+14.2 SETUP
+- Create a <canvas id="bg-canvas"> at the very top of <body>.
+- Position it: position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none;
+- All page content sits above it with position: relative; z-index: 1+.
+- Three.js loaded via CDN: https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js
+
+14.3 SCENE CONSTRUCTION
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.setZ(30);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+14.4 GEOMETRIES (USE THESE FOUR)
+  new THREE.TorusGeometry(10, 3, 16, 100)
+  new THREE.OctahedronGeometry(8)
+  new THREE.IcosahedronGeometry(7)
+  new THREE.TetrahedronGeometry(8)
+
+14.5 MATERIAL
+  new THREE.MeshStandardMaterial({
+    color: 0xd4a574,      // match your accent color
+    wireframe: true,
+    transparent: true,
+    opacity: 0.15         // low opacity — this is the key to the subtle look
+  })
+
+14.6 POPULATING THE SCENE
+  Create 15 mesh instances. For each:
+  - Random position: THREE.MathUtils.randFloatSpread(100) for x, y, z.
+  - Random initial rotation (Math.random() * Math.PI for x and y).
+  - Store per-mesh rotation speeds in userData:
+      shape.userData.rotationSpeed = {
+        x: (Math.random() - 0.5) * 0.01,
+        y: (Math.random() - 0.5) * 0.01
+      }
+  - Add point light (0xd4a574, intensity 1) + ambient light (0xffffff, 0.3).
+
+14.7 ANIMATION LOOP
+  function animate() {
+    requestAnimationFrame(animate);
+    // Smooth mouse follow
+    targetX += (mouseX - targetX) * 0.05;
+    targetY += (mouseY - targetY) * 0.05;
+    camera.position.x = targetX * 5;
+    camera.position.y = targetY * 5;
+    camera.lookAt(scene.position);
+    // Rotate all shapes
+    shapes.forEach(s => {
+      s.rotation.x += s.userData.rotationSpeed.x;
+      s.rotation.y += s.userData.rotationSpeed.y;
+    });
+    renderer.render(scene, camera);
+  }
+
+14.8 MOUSE TRACKING
+  document.addEventListener('mousemove', e => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+  The 0.05 lerp factor in the loop makes camera movement smooth and "floaty."
+
+14.9 SCROLL PARALLAX
+  window.addEventListener('scroll', () => {
+    const t = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+    camera.position.z = 30 + t * 20;
+  });
+  This pushes the camera back as the user scrolls, making shapes appear to recede.
+
+14.10 SECTION PULSE (OPACITY ANIMATION)
+  Use IntersectionObserver on each .section element.
+  When a section enters the viewport, briefly boost shape material opacity
+  then return it to baseline. This creates a subtle "alive" feel.
+
+14.11 RESPONSIVE RESIZE
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+14.12 PARTICLES (OPTIONAL LAYER)
+For an additional particle layer, use particles.js or tsParticles.
+Config for CV style:
+  - number: 80, color: accent, shape: circle, opacity: 0.3,
+  - size: 2–3px, move speed: 1–2,
+  - line_linked: enable, distance 150, opacity 0.2
+This layer sits between the Three.js canvas and the content.
+Use it sparingly — Three.js alone is often enough.
+
+14.13 LIGHT MODE ADAPTATION
+When the user switches to light mode:
+- Change the Three.js shape color to match the accent at lower opacity (0.1).
+- Or switch to a lighter wireframe color (e.g., 0x888888 at opacity 0.08).
+- Do this dynamically: shapes.forEach(s => s.material.color.setHex(newHex)).
+
+14.14 PERFORMANCE GUARDRAILS
+- On mobile or low-end devices (navigator.hardwareConcurrency < 4):
+  reduce shape count to 6–8 and disable particles.
+- Always use pointer-events: none on the canvas.
+- The Three.js canvas is behind content (z-index: 0); content is z-index: 1+.
+- On prefers-reduced-motion: stop the animation loop. Show a static gradient instead.
+
+14.15 CUSTOM CURSOR (PORTFOLIO-SPECIFIC)
+- Create two DOM elements: .cursor-dot (4px, accent-colored circle) and
+  .cursor-outline (40px, transparent with accent border).
+- Track mousemove. Move .cursor-dot directly (no lag).
+- Move .cursor-outline with a lerp factor of ~0.15 for the "trailing ring" feel.
+- On interactive element hover: scale the ring up (transform: scale(2)).
+- On mousedown: shrink both slightly (scale: 0.8).
+- Hide both elements on mobile (pointer: coarse media query).
+
+----------------------------------------------------------------
+15) PACKAGING + DELIVERY
+----------------------------------------------------------------
+15.1 FILE STRUCTURE (MULTI-FILE PROJECT)
+  index.html        — HTML skeleton (no content hardcoded; pulled from data.js)
+  styles.css        — Main styles
+  animations.css    — Keyframe animations (keep separate)
+  print.css         — Print stylesheet (linked with media="print")
+  app.js            — DOM building from portfolioData + UI logic
+  data.js           — All content data (portfolioData object)
+  config.js         — Feature flags (EDITABLE_MODE, ANIMATION_CONFIG, etc.)
+  charts.js         — Chart.js chart initialisation
+  animations.js     — GSAP / ScrollTrigger animations
+  three-bg.js       — Three.js 3D background
+  easter-eggs.js    — Easter egg effects (optional)
+
+15.2 CDN DEPENDENCIES (FOR OFFLINE-UNSAFE / SINGLE-FILE PROJECTS)
+  GSAP:        https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js
+  ScrollTrigger: https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js
+  Three.js:    https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js
+  Chart.js:    https://cdn.jsdelivr.net/npm/chart.js
+  Particles.js: https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js
+  Google Fonts: https://fonts.googleapis.com (Playfair Display + Work Sans recommended)
+
+15.3 EDITABLE_MODE FLAG (FROM config.js)
+  const EDITABLE_MODE = false;
+  When true: inline editing, image upload buttons, colour picker visible.
+  When false: all edit controls removed — zero performance impact.
+  Always ship with EDITABLE_MODE = false.
+
+15.4 SINGLE-FILE DELIVERY
+  If the user wants one HTML file: inline all CSS in <style>, all JS in <script>.
+  Embed font imports as @import in the <style> block.
+  Keep the logical sections clearly commented.
+
+15.5 FINAL CHECKLIST BEFORE DELIVERY
+  □ No console errors
+  □ All nav items route somewhere real
+  □ All buttons and controls are wired
+  □ Theme toggle works and persists
+  □ Smooth scroll working
+  □ GSAP scroll animations trigger correctly
+  □ Three.js background loads and follows mouse
+  □ Mobile responsive (hamburger menu, single column, no overflow)
+  □ Print stylesheet hides 3D canvas and interactive elements
+  □ prefers-reduced-motion respected
+  □ Custom cursor hidden on mobile
+  □ <title>, favicon, and meta description set
+  □ EDITABLE_MODE = false
+
+================================================================
+END OF WIGLO Web_Key (Claude Edition v1)
+================================================================

@@ -1,0 +1,782 @@
+WIGLO — 3D Background Guide v2
+============================================================
+HOW TO BUILD THE FLOATING GEOMETRIC BACKGROUND
+Black / White / Gold palette — 8 ready-to-use variations
+Including charcoal + engraved pattern backgrounds
+============================================================
+THIS FILE IS FOR THE AI ONLY.
+
+Read the CORE SETUP section once, then pick a VARIATION and
+copy-paste its config block. Every variation is self-contained.
+
+================================================================
+PART 1 — CORE SETUP (SAME FOR ALL VARIATIONS)
+================================================================
+
+----------------------------------------------------------------
+DEPENDENCIES
+----------------------------------------------------------------
+Three.js r128 — load BEFORE your three-bg.js script:
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+----------------------------------------------------------------
+HTML
+----------------------------------------------------------------
+Place this as the VERY FIRST child of <body>:
+
+  <!-- Optional: engraved pattern layer (used by charcoal variants) -->
+  <div id="bg-pattern"></div>
+
+  <!-- 3D canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Your actual page content -->
+  <div class="page-wrapper">...</div>
+
+----------------------------------------------------------------
+BASE CSS
+----------------------------------------------------------------
+
+  #bg-pattern {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      /* Pattern is set per-variation — see each variant's CSS block */
+  }
+
+  #bg-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;           /* sits above the pattern layer */
+      pointer-events: none; /* CRITICAL — never blocks page clicks */
+  }
+
+  .page-wrapper {
+      position: relative;
+      z-index: 2;           /* all content above both layers */
+  }
+
+----------------------------------------------------------------
+THE COMPLETE BASE three-bg.js
+----------------------------------------------------------------
+This is the engine. Paste the VARIATION CONFIG block at the top
+to switch between looks. The rest of the file stays identical.
+
+/* ===== three-bg.js ===== */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initThreeBackground();
+});
+
+function initThreeBackground() {
+    if (typeof THREE === 'undefined') {
+        console.warn('Three.js not loaded — skipping 3D background');
+        return;
+    }
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const canvas = document.getElementById('bg-canvas');
+    if (!canvas) return;
+
+    // ============================================================
+    // PASTE YOUR CHOSEN VARIATION CONFIG HERE
+    // (replace the block below with any variation from Part 2)
+    // ============================================================
+    const CONFIG = {
+        colors:      [0xd4a574],   // array of hex colors — shapes pick randomly
+        shapeTypes:  ['torus', 'octahedron', 'icosahedron', 'tetrahedron'],
+        shapeCount:  15,
+        spread:      100,
+        opacity:     0.15,
+        cameraZ:     30,
+        mouseFactor: 5,
+        lerpFactor:  0.05,
+        scrollDepth: 20,
+        rotSpeed:    0.01,         // max rotation speed multiplier
+        wireframe:   true
+    };
+    // ============================================================
+
+    // --- Scene ---
+    const scene  = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(
+        75, window.innerWidth / window.innerHeight, 0.1, 1000
+    );
+    camera.position.setZ(CONFIG.cameraZ);
+
+    const renderer = new THREE.WebGLRenderer({
+        canvas, alpha: true, antialias: true
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // --- Geometry library ---
+    // Add/remove entries from this map freely.
+    const GEO = {
+        // ---- ORIGINAL FOUR ----
+        torus:        () => new THREE.TorusGeometry(10, 3, 16, 100),
+        octahedron:   () => new THREE.OctahedronGeometry(8),
+        icosahedron:  () => new THREE.IcosahedronGeometry(7),
+        tetrahedron:  () => new THREE.TetrahedronGeometry(8),
+
+        // ---- NEW SIMPLE SHAPES ----
+        cube:         () => new THREE.BoxGeometry(10, 10, 10),
+            // Clean crisp cube — very satisfying in wireframe.
+            // Looks like a floating crate or die.
+
+        lowPolySphere:() => new THREE.SphereGeometry(8, 8, 6),
+            // Low segment count = faceted, angular look.
+            // Not a smooth ball — more like a geode or gem.
+
+        cone:         () => new THREE.ConeGeometry(7, 14, 8),
+            // Eight-sided cone. Tall and directional.
+            // Adds variety because it's not symmetrical in all axes.
+
+        cylinder:     () => new THREE.CylinderGeometry(5, 5, 14, 8),
+            // Eight-sided cylinder / prism.
+            // Simple and architectural-feeling.
+
+        flatRing:     () => new THREE.RingGeometry(5, 9, 6),
+            // Flat hexagonal ring lying in 3D space.
+            // Looks like a portal or coin tumbling through air.
+
+        dodecahedron: () => new THREE.DodecahedronGeometry(7),
+            // 12-faced. Fuller/rounder than icosahedron.
+            // Slightly organic compared to the others.
+
+        torusKnot:    () => new THREE.TorusKnotGeometry(6, 1.5, 80, 10),
+            // The pretzel / infinity knot shape.
+            // Instantly recognisable, very dynamic-looking.
+            // Use sparingly — one or two per scene max.
+
+        pyramid:      () => new THREE.ConeGeometry(8, 10, 4),
+            // Four-sided pyramid / triangle. Egyptian.
+            // Completely different silhouette from the others.
+
+        hexPrism:     () => new THREE.CylinderGeometry(7, 7, 10, 6),
+            // Six-sided prism. Honeycomb-like.
+
+        thinRing:     () => new THREE.TorusGeometry(9, 0.8, 8, 60),
+            // A thin ring/halo — much more delicate than the fat torus.
+            // Great as a counterpoint to bulkier shapes.
+    };
+
+// Build the shapes
+    const shapes = [];
+    const isMobile = window.innerWidth < 768 || (navigator.hardwareConcurrency || 4) < 4;
+    const count    = isMobile ? Math.floor(CONFIG.shapeCount / 2) : CONFIG.shapeCount;
+
+    const MIN_DIST  = 18;
+    const MAX_TRIES = 30;
+
+    function findOpenPosition(existing, spread, minDist, maxTries) {
+        for (let attempt = 0; attempt < maxTries; attempt++) {
+            const candidate = new THREE.Vector3(
+                THREE.MathUtils.randFloatSpread(spread),
+                THREE.MathUtils.randFloatSpread(spread),
+                THREE.MathUtils.randFloatSpread(spread)
+            );
+            const tooClose = existing.some(s => s.position.distanceTo(candidate) < minDist);
+            if (!tooClose) return candidate;
+        }
+        return null;
+    }
+
+    for (let i = 0; i < count; i++) {
+        const typeName = CONFIG.shapeTypes[Math.floor(Math.random() * CONFIG.shapeTypes.length)];
+        const geometry = GEO[typeName]();
+        const color    = CONFIG.colors[Math.floor(Math.random() * CONFIG.colors.length)];
+        const material = new THREE.MeshStandardMaterial({
+            color,
+            wireframe:   CONFIG.wireframe,
+            transparent: true,
+            opacity:     CONFIG.opacity
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+
+        const pos = findOpenPosition(shapes, CONFIG.spread, MIN_DIST, MAX_TRIES);
+        if (!pos) continue;
+        mesh.position.copy(pos);
+
+        mesh.rotation.x = Math.random() * Math.PI;
+        mesh.rotation.y = Math.random() * Math.PI;
+        mesh.userData.rotSpeed = {
+            x: (Math.random() - 0.5) * CONFIG.rotSpeed,
+            y: (Math.random() - 0.5) * CONFIG.rotSpeed
+        };
+        mesh.userData.baseOpacity = CONFIG.opacity;
+        scene.add(mesh);
+        shapes.push(mesh);
+    }
+
+    // Lighting
+    const keyLight  = new THREE.PointLight(CONFIG.colors[0], 1.2);
+    keyLight.position.set(20, 20, 20);
+    scene.add(keyLight);
+    const fillLight = new THREE.PointLight(0xffffff, 0.4);
+    fillLight.position.set(-20, -10, 10);
+    scene.add(fillLight);
+    const ambLight  = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambLight);
+
+    // Mouse tracking
+    let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
+    document.addEventListener('mousemove', (e) => {
+        mouseX = (e.clientX / window.innerWidth)  *  2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * -2 + 1;
+    });
+
+    // Scroll depth
+    window.addEventListener('scroll', () => {
+        const t = window.pageYOffset /
+            Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        camera.position.z = CONFIG.cameraZ + t * CONFIG.scrollDepth;
+    });
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+
+        targetX += (mouseX - targetX) * CONFIG.lerpFactor;
+        targetY += (mouseY - targetY) * CONFIG.lerpFactor;
+
+        camera.position.x = targetX * CONFIG.mouseFactor;
+        camera.position.y = targetY * CONFIG.mouseFactor;
+        camera.lookAt(scene.position);
+
+        shapes.forEach(s => {
+            s.rotation.x += s.userData.rotSpeed.x;
+            s.rotation.y += s.userData.rotSpeed.y;
+        });
+
+        renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // Resize
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Section pulse
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) pulseShapes(); });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll('.section, section').forEach(s => obs.observe(s));
+
+    function pulseShapes() {
+        shapes.forEach((shape, i) => {
+            setTimeout(() => {
+                let t = 0;
+                const base = shape.userData.baseOpacity;
+                const id   = setInterval(() => {
+                    t += 0.06;
+                    shape.material.opacity = base + Math.sin(t * Math.PI) * (base * 0.6);
+                    if (t >= 1) { clearInterval(id); shape.material.opacity = base; }
+                }, 16);
+            }, i * 50);
+        });
+    }
+
+    // Public API for theme switching
+    window.updateBgColors = function(hexArray) {
+        shapes.forEach(s => {
+            const c = hexArray[Math.floor(Math.random() * hexArray.length)];
+            s.material.color.setHex(c);
+        });
+        if (keyLight) keyLight.color.setHex(hexArray[0]);
+    };
+}
+
+
+================================================================
+PART 2 — VARIATION CONFIGS
+================================================================
+Copy the CONFIG block from your chosen variation and paste it
+into the CONFIG section of three-bg.js above.
+Also copy any CSS into your stylesheet (page background + pattern).
+
+Each variation also lists which body background CSS to set.
+The pattern CSS goes on the #bg-pattern element.
+
+----------------------------------------------------------------
+VARIATION A — GOLD CLASSIC
+"The original. Deep black, warm gold wireframes."
+Best for: dark luxury portfolios, the original CV look.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #0a0a0a; }
+  #bg-pattern { display: none; }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574],
+      shapeTypes: ['torus', 'octahedron', 'icosahedron', 'tetrahedron',
+                   'cube', 'dodecahedron', 'thinRing'],
+      shapeCount: 15,
+      spread:     100,
+      opacity:    0.15,
+      cameraZ:    30,
+      mouseFactor: 5,
+      lerpFactor:  0.05,
+      scrollDepth: 20,
+      rotSpeed:    0.01,
+      wireframe:   true
+  };
+
+FEEL: Familiar, premium, warm. The benchmark.
+
+----------------------------------------------------------------
+VARIATION B — PEARL WHITE
+"Ice cold. White wireframes on near-black. Ethereal."
+Best for: clean minimal portfolios, editorial sites, very modern look.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #0d0d0d; }
+  #bg-pattern { display: none; }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xf0ede8, 0xe8e4de, 0xd8d4ce],
+                   // three slightly different whites for natural variance
+      shapeTypes: ['icosahedron', 'dodecahedron', 'lowPolySphere',
+                   'thinRing', 'flatRing', 'octahedron'],
+                   // rounder, more crystalline shapes suit white better
+      shapeCount: 12,
+      spread:     110,
+      opacity:    0.12,   // white reads brighter so keep it lower
+      cameraZ:    30,
+      mouseFactor: 4,
+      lerpFactor:  0.04,  // slower = dreamier
+      scrollDepth: 15,
+      rotSpeed:    0.007, // slightly slower rotation for an icy calm feel
+      wireframe:   true
+  };
+
+FEEL: Cold, crystalline, like floating ice geometry. Very different mood from gold.
+
+----------------------------------------------------------------
+VARIATION C — TRI-COLOR SCATTER
+"Gold, white, and dark grey shapes all mixed together."
+Best for: a richer, more layered scene with visual depth.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #080808; }
+  #bg-pattern { display: none; }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574, 0xf0ede8, 0x3a3632],
+                   // gold, pearl white, and dark warm grey
+                   // the dark grey shapes read as "behind" the bright ones = depth
+      shapeTypes: ['torus', 'cube', 'tetrahedron', 'icosahedron',
+                   'octahedron', 'cone', 'thinRing', 'pyramid'],
+      shapeCount: 20,  // more shapes because they're at different brightnesses
+      spread:     120,
+      opacity:    0.18,
+      cameraZ:    35,
+      mouseFactor: 6,
+      lerpFactor:  0.05,
+      scrollDepth: 25,
+      rotSpeed:    0.012,
+      wireframe:   true
+  };
+
+FEEL: Alive and layered. The dark shapes add depth, the white ones glow, gold is the warmth.
+The colour variance tricks your eye into seeing more distance between objects.
+
+----------------------------------------------------------------
+VARIATION D — GOLD SPARSE
+"Only 5–6 shapes. Large, slow, architectural."
+Best for: very clean hero sections, when you want shapes to be noticed individually.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #0a0a0a; }
+  #bg-pattern { display: none; }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574, 0xc49060],   // two shades of gold for warmth variation
+      shapeTypes: ['torusKnot', 'icosahedron', 'thinRing', 'dodecahedron'],
+                   // complex shapes look better when they have space to breathe
+      shapeCount: 6,
+      spread:     80,
+      opacity:    0.20,   // fewer shapes so each can be a bit brighter
+      cameraZ:    25,
+      mouseFactor: 8,     // stronger mouse response since fewer shapes to fill movement
+      lerpFactor:  0.03,  // very slow, very smooth
+      scrollDepth: 30,
+      rotSpeed:    0.005, // barely moving — almost still
+      wireframe:   true
+  };
+
+FEEL: Meditative. You can see each individual shape clearly.
+The torus knot alone makes this feel expensive.
+
+----------------------------------------------------------------
+VARIATION E — CHARCOAL ENGRAVED GRID
+"Warm charcoal background with a subtle grid burned into it. Gold shapes."
+Best for: when you want a "material" background, not just void black.
+The grid feels like graph paper, drafting paper, or circuit board texture.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #1a1917; }  /* warm charcoal */
+
+PATTERN CSS — add this to #bg-pattern:
+  #bg-pattern {
+      background-image:
+          linear-gradient(rgba(212, 165, 116, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(212, 165, 116, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+      /* The lines are at 5% opacity — visible but extremely subtle.
+         If you want it more visible push to 0.07–0.08.
+         If barely-there is better, drop to 0.03. */
+  }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574, 0xe0b882],   // gold and lighter gold
+      shapeTypes: ['cube', 'octahedron', 'tetrahedron', 'pyramid',
+                   'hexPrism', 'cylinder'],
+                   // angular, architectural shapes suit the grid pattern
+      shapeCount: 14,
+      spread:     100,
+      opacity:    0.18,
+      cameraZ:    30,
+      mouseFactor: 5,
+      lerpFactor:  0.05,
+      scrollDepth: 20,
+      rotSpeed:    0.009,
+      wireframe:   true
+  };
+
+FEEL: Like a designer's drafting table come to life. The grid anchors the scene.
+The shapes feel like they're floating above a ruled surface. Very sophisticated.
+
+NOTE ON THE PATTERN:
+Two overlapping linear-gradient layers create the grid.
+Each is 1px wide and 40px apart. The gold tint (5% opacity) means it
+matches the accent color without being garish. It's visible if you look
+for it but won't distract from content.
+
+----------------------------------------------------------------
+VARIATION F — CHARCOAL DOT MATRIX
+"Dark charcoal with a dot-grid pattern. White wireframe shapes."
+Best for: a softer, more organic "engraved" feel than the hard grid.
+The dots feel like embossed paper or a perforated steel plate.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #171717; }  /* neutral charcoal, slightly cooler than E */
+
+PATTERN CSS:
+  #bg-pattern {
+      background-image:
+          radial-gradient(circle, rgba(240, 237, 232, 0.12) 1px, transparent 1px);
+      background-size: 28px 28px;
+      /* Each dot is 1px radius at 12% white opacity.
+         28px spacing = dense enough to feel like texture, not like polka dots.
+         Shrink to 20px for denser. Grow to 40px for sparser. */
+  }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xf0ede8, 0xe0dcd6],   // pearl white and slightly warmer white
+      shapeTypes: ['lowPolySphere', 'icosahedron', 'thinRing', 'flatRing',
+                   'dodecahedron', 'torus'],
+                   // round/curved shapes contrast nicely with the dot grid
+      shapeCount: 13,
+      spread:     100,
+      opacity:    0.13,
+      cameraZ:    30,
+      mouseFactor: 4.5,
+      lerpFactor:  0.04,
+      scrollDepth: 18,
+      rotSpeed:    0.008,
+      wireframe:   true
+  };
+
+FEEL: Quiet and textured. The dots give the dark background a material quality.
+White shapes float above like frosted glass. More subtle than Variation E.
+
+----------------------------------------------------------------
+VARIATION G — CHARCOAL DIAGONAL HATCH
+"Dark charcoal with faint diagonal line hatching. Mix of gold and white."
+Best for: a hand-drawn, architectural feel — like tracing paper over dark linen.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #141412; }  /* very dark warm charcoal */
+
+PATTERN CSS:
+  #bg-pattern {
+      background-image:
+          repeating-linear-gradient(
+              45deg,
+              rgba(212, 165, 116, 0.04) 0px,
+              rgba(212, 165, 116, 0.04) 1px,
+              transparent 1px,
+              transparent 18px
+          );
+      /* 45-degree lines, 1px wide, 18px apart, gold at 4% opacity.
+         Goes from invisible to very subtle depending on your screen.
+         Change angle to -45deg for the other direction.
+         Layer two (counter-diagonal) for a crosshatch:
+         Stack a second set at -45deg by adding a comma and repeating
+         the repeating-linear-gradient below at -45deg. */
+  }
+
+  /* CROSSHATCH VERSION — stronger, like graph paper at an angle: */
+  /*
+  #bg-pattern {
+      background-image:
+          repeating-linear-gradient(
+              45deg,
+              rgba(212, 165, 116, 0.04) 0px,
+              rgba(212, 165, 116, 0.04) 1px,
+              transparent 1px,
+              transparent 18px
+          ),
+          repeating-linear-gradient(
+              -45deg,
+              rgba(212, 165, 116, 0.04) 0px,
+              rgba(212, 165, 116, 0.04) 1px,
+              transparent 1px,
+              transparent 18px
+          );
+  }
+  */
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574, 0xf0ede8, 0xc49060],
+                   // gold, white, darker gold — three-way contrast
+      shapeTypes: ['cone', 'pyramid', 'tetrahedron', 'octahedron',
+                   'cube', 'cylinder', 'thinRing'],
+                   // angular and directional shapes play off the diagonal lines
+      shapeCount: 16,
+      spread:     105,
+      opacity:    0.16,
+      cameraZ:    30,
+      mouseFactor: 5,
+      lerpFactor:  0.05,
+      scrollDepth: 20,
+      rotSpeed:    0.010,
+      wireframe:   true
+  };
+
+FEEL: The diagonal hatch gives the background a directional energy.
+Shapes feel like they're cutting through ruled space. Architectural, precise.
+
+----------------------------------------------------------------
+VARIATION H — BLACK + GOLD SOLID (NO WIREFRAME)
+"Solid geometry at ultra-low opacity. Like shadows cast by shapes."
+Completely different feeling from all wireframe variants.
+Best for: a more understated, shadow-like background presence.
+----------------------------------------------------------------
+
+BODY CSS:
+  body { background: #080808; }
+  #bg-pattern { display: none; }
+
+CONFIG:
+  const CONFIG = {
+      colors:     [0xd4a574, 0xb8924e, 0x1a1612],
+                   // gold, darker gold, and near-black.
+                   // near-black solid shapes create shadow-like cutout feeling.
+      shapeTypes: ['icosahedron', 'dodecahedron', 'lowPolySphere',
+                   'cube', 'octahedron'],
+      shapeCount: 12,
+      spread:     90,
+      opacity:    0.07,   // MUCH lower for solid — solid shapes read louder
+      cameraZ:    28,
+      mouseFactor: 4,
+      lerpFactor:  0.04,
+      scrollDepth: 15,
+      rotSpeed:    0.006,
+      wireframe:   false  // <-- SOLID MODE
+  };
+
+EXTRA CSS — add a softer ambient glow to the canvas for this variant:
+  #bg-canvas {
+      filter: blur(0.5px);  /* very slight blur softens solid geometry edges */
+  }
+
+FEEL: Like shapes are formed from the darkness itself.
+The near-black solid shapes feel like voids, gold ones like glowing embers.
+Very different from wireframe — more mysterious, less technical.
+
+================================================================
+PART 3 — ENGRAVED PATTERNS REFERENCE
+================================================================
+Quick library of CSS patterns for the #bg-pattern element.
+Mix and match with any variation. All are intentionally very subtle.
+
+Fine grid (most popular — clean and technical):
+  background-image:
+      linear-gradient(rgba(212,165,116,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,165,116,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+
+Small dots (soft, organic):
+  background-image:
+      radial-gradient(circle, rgba(240,237,232,0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+
+Large dots (sparser, more refined):
+  background-image:
+      radial-gradient(circle, rgba(212,165,116,0.08) 1.5px, transparent 1.5px);
+  background-size: 48px 48px;
+
+Diagonal lines (directional energy):
+  background-image:
+      repeating-linear-gradient(
+          45deg,
+          rgba(212,165,116,0.04) 0px, rgba(212,165,116,0.04) 1px,
+          transparent 1px, transparent 18px
+      );
+
+Crosshatch (strongest pattern — use with lowest opacity shapes):
+  background-image:
+      repeating-linear-gradient(
+          45deg,
+          rgba(212,165,116,0.03) 0px, rgba(212,165,116,0.03) 1px,
+          transparent 1px, transparent 18px
+      ),
+      repeating-linear-gradient(
+          -45deg,
+          rgba(212,165,116,0.03) 0px, rgba(212,165,116,0.03) 1px,
+          transparent 1px, transparent 18px
+      );
+
+Micro grid (very fine, almost invisible — like linen texture):
+  background-image:
+      linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 16px 16px;
+
+Hex dots (triangular grid — more unusual):
+  background-image:
+      radial-gradient(circle, rgba(212,165,116,0.09) 1px, transparent 1px),
+      radial-gradient(circle, rgba(212,165,116,0.09) 1px, transparent 1px);
+  background-size: 24px 42px;
+  background-position: 0 0, 12px 21px;
+
+Scaling opacity:
+  With any pattern, the RGB values and the alpha value are your two controls.
+  Use the same RGB as your accent so it feels integrated, not foreign.
+  Alpha 0.03 = barely there (felt, not seen)
+  Alpha 0.06 = noticeable on close inspection
+  Alpha 0.10 = clearly visible, part of the design
+  Alpha 0.15+ = prominent, almost an intentional graphic element
+
+================================================================
+PART 4 — SHAPE NOTES
+================================================================
+Notes on how each shape reads in wireframe, to help you pick combinations.
+
+torus          — The iconic donut ring. Familiar and satisfying. Good anchor shape.
+octahedron     — Clean diamond. Symmetrical from every angle. Very geometric.
+icosahedron    — Faceted "almost sphere". Sophisticated, not round, not sharp.
+tetrahedron    — Simple triangle pyramid. The most minimal 3D shape.
+cube           — Instantly readable. Good contrast against curved shapes. Feels solid.
+lowPolySphere  — Rough faceted ball, like a gem or a mineral crystal. 8 segments wide.
+cone           — Directional and asymmetric. Adds movement because it points.
+cylinder       — Architectural, like a column or a drum. Very stable-looking.
+flatRing       — 2D-feeling ring tumbling in 3D. Like a coin spinning. Very dynamic.
+dodecahedron   — 12 pentagons. Rounder and more organic than icosahedron.
+torusKnot      — The pretzel. Instantly striking. Use 1–2 max — it's a statement shape.
+pyramid        — 4-sided cone. Egyptian/architectural. Very different silhouette.
+hexPrism       — Six-sided column. Honeycomb/natural feeling.
+thinRing       — Delicate halo. Much lighter presence than torus. Good "filler" shape.
+
+Good combinations:
+  Bold mix:       torus + cube + tetrahedron + cone           (sharp and varied)
+  Organic mix:    icosahedron + dodecahedron + lowPolySphere  (round and mineral)
+  Architectural:  cube + cylinder + pyramid + hexPrism        (structured and stable)
+  Minimal:        torusKnot + thinRing + icosahedron          (complex vs delicate)
+  Classic:        torus + octahedron + icosahedron + tetrahedron (the original 4)
+
+================================================================
+PART 5 — SWITCHING BETWEEN VARIATIONS AT RUNTIME
+================================================================
+If you want a live variation picker in the UI:
+
+  const PRESETS = {
+      goldClassic:  { colors: [0xd4a574], opacity: 0.15, rotSpeed: 0.01 },
+      pearlWhite:   { colors: [0xf0ede8], opacity: 0.12, rotSpeed: 0.007 },
+      triColor:     { colors: [0xd4a574, 0xf0ede8, 0x3a3632], opacity: 0.18, rotSpeed: 0.012 }
+  };
+
+  function applyPreset(name) {
+      const p = PRESETS[name];
+      if (!p) return;
+      if (window.updateBgColors) window.updateBgColors(p.colors);
+      // opacity and speed changes require iterating shapes directly:
+      // shapes.forEach(s => { s.material.opacity = p.opacity; s.userData.baseOpacity = p.opacity; ... })
+      // For simplicity, trigger a full reinit: call initThreeBackground() again after clearing shapes.
+  }
+
+================================================================
+PART 6 — WHY IT WORKS (EXPLAIN TO ANOTHER AI)
+================================================================
+
+1. WIREFRAME + LOW OPACITY is the trick.
+   Solid shapes at the same opacity = blobs. Wireframe = see-through lattice.
+   You see the edges, the internal structure, and shapes behind each other.
+   That layering creates perceived depth without any real depth sorting.
+
+2. ALPHA: true ON THE RENDERER.
+   The WebGL canvas background becomes transparent. The CSS body background
+   shows through. Without this, you get a black WebGL rectangle.
+
+3. MULTI-COLOR ARRAY.
+   Randomly assigning each shape a color from the array makes the scene look
+   designed and layered. Three colors (gold, white, dark grey) at the same
+   opacity create the illusion of different depths because white reads as closer,
+   dark grey reads as further away.
+
+4. LERP FACTOR 0.03–0.05.
+   The camera moves toward the mouse at (mouseX - currentX) * 0.05 per frame.
+   This never fully reaches the target — so it always looks like it's catching up.
+   That's the "floating on water" quality. Lower = dreamier. Higher = snappier.
+
+5. SCROLL CAMERA PULL-BACK.
+   Moving camera.position.z as the user scrolls makes shapes feel like they exist
+   in a persistent world, not just a looping animation. The scene recedes as you
+   explore the page. Subtle but deeply effective.
+
+6. POINTER-EVENTS: NONE on the canvas.
+   Without this, the canvas eats every click and the page is unusable.
+   This is the most common mistake. Always set it.
+
+7. THE ENGRAVED PATTERN LAYER.
+   CSS gradient patterns are essentially free in terms of performance —
+   they're static backgrounds rendered by the GPU once.
+   The pattern layer sits between the body background and the canvas.
+   It adds material texture to what would otherwise be a flat color void.
+   The key is keeping the alpha low enough that it reads as "embedded" in
+   the surface rather than drawn on top of it. 0.04–0.06 is usually right.
+
+8. SHAPE COUNT VS SPREAD BALANCE.
+   15 shapes at spread 100 = a medium-density field.
+   6 shapes at spread 80 = sparse, each shape visible individually.
+   25 shapes at spread 60 = dense, overlapping, more energetic.
+   The density changes the entire personality of the background.
+
+================================================================
+END OF WIGLO 3D Background Guide v2
+================================================================

@@ -1,0 +1,808 @@
+WIGLO — Web_Key
+============================================================
+THIS IS FOR THE AI ONLY.
+
+NOTE: Packaging/offline/zip/deliverable rules live in the Project Instructions, not in this key.
+
+Goal: Ship-ready web apps/sites that do NOT look “AI-generated” or template-like.
+This key merges:
+- TXT key (Web_Key_Merged_v4.txt) as the main baseline for structure + appearance discipline
+- PDF key (Web_Key.pdf) as the enforcement layer for behavior, polish, and QA
+
+----------------------------------------------------------------
+RULE PRIORITY (MANDATORY)
+----------------------------------------------------------------
+HARD RULES: MUST / MUST NOT / DO NOT / NEVER / REQUIRED.
+DEFAULTS: SHOULD / Avoid / Prefer (follow unless the user explicitly overrides).
+
+When rules conflict:
+   (1) Real product feel (ship-ready behavior)
+   (2) Clarity + usability + interaction states
+   (3) Correctness + state wiring (no dead UI)
+   (4) Theme consistency (tokenized palette; no random colors)
+   (5) Features last (avoid feature soup)
+
+IMPORTANT:
+- Never justify these rules in the final product UI. Just implement them.
+- If something looks like a template at 100% or 110% zoom, simplify again.
+
+----------------------------------------------------------------
+0) PRIME DIRECTIVE — HUMAN-GRADE DELIVERY (MANDATORY)
+----------------------------------------------------------------
+Before finalizing ANY page/component, run these quality passes:
+
+PASS A — CRITIC (“Kill AI smell”)
+- Remove: artificial glows, heavy borders, gratuitous cards/containers, glass blur, neon gradients.
+- Reduce chrome: fewer lines, fewer pills, fewer decorative icons.
+- Remove “feature grid” layouts unless explicitly asked for a landing page.
+- If a screenshot still looks like a cookie-cutter template: simplify (fewer boxes, more alignment).
+
+PASS B — FUNCTIONAL QA (“No dead UI”)
+- Every clickable element MUST do something visible.
+- If not implemented: remove it, hide it, or disable it with explicit “coming soon” microcopy.
+- Nav items must route somewhere meaningful (or be hidden).
+- Verify: filters, sorting, toggles, modals, drawers, carousels/rails, form validation, close behaviors.
+
+PASS C — ACCESSIBILITY + POLISH
+- Keyboard-only pass: focus visible, tab order logical, ESC closes overlays, Enter activates items.
+- Reduced motion supported (prefers-reduced-motion).
+- Contrast and readable font sizes.
+- Mobile + 110% zoom pass: no broken panels, no overflow traps.
+- Skip link exists and works.
+- Semantic HTML where possible; ARIA only when needed.
+- Meaningful images have alt; decorative images use alt="".
+- No hover-only features: critical actions must be reachable on touch.
+- Touch/click targets are usable: minimum 24x24 CSS px; on mobile prefer ~44px-tall primary controls.
+- Meta sanity: include <meta name="viewport" content="width=device-width, initial-scale=1">.
+
+
+PASS D — “NO-BOX CHECK”
+- If you see “card soup” or boxed stacks: FAIL.
+- Remove 30–60% of boxes; replace with spacing + dividers + typography.
+
+----------------------------------------------------------------
+1) PAGE ARCHETYPES (PICK ONE PER PAGE)
+----------------------------------------------------------------
+Choose ONE archetype per page and commit:
+
+A) TOOL / DASHBOARD
+- Sidebar + list/table + details/inspector (or two-pane layout)
+- Minimal chrome, dense but readable
+
+B) CATALOG / STORE / MEDIA
+- Rails + grid/list + filters + detail page
+- Strong browse/discovery patterns; stateful sorting/filtering
+
+C) CONTENT / NEWS / DOCS
+- Readable content column; optional TOC/aside
+- IMPORTANT: asides are UNBOXED modules, not a stack of cards
+
+D) LANDING / MARKETING (RARE)
+- Only if explicitly requested; otherwise avoid “hero + features + CTA” patterns.
+
+----------------------------------------------------------------
+2) ANTI-BOX SYSTEM (THE CORE LOOK)
+----------------------------------------------------------------
+Problem: Boxes/cards everywhere = template/AI look.
+Real products rely on: whitespace, typography hierarchy, subtle rules, and consistent rhythm.
+
+2.1 CARD QUOTA (HARD)
+- If a view shows more than ~6 “panel cards” at once, you are probably wrong.
+- Cards are allowed mainly for:
+  (1) clickable entity tiles (products/games/articles) OR
+  (2) raised overlays (modal/menu/toast) OR
+  (3) truly distinct “object” components (e.g., a pricing plan table, a single promo unit)
+
+Everything else should be UNBOXED sections.
+
+2.2 FORBIDDEN BOX TRAITS (HARD)
+DO NOT:
+- wrap every section in a rounded rectangle background
+- stack multiple right-rail “cards” with shadows
+- add noticeable borders around every container
+- add glow-y shadows on dark mode (reads like cheap glass)
+- put a “panel background” behind long-form text (content pages)
+
+2.3 WHAT TO USE INSTEAD (DEFAULT REPLACEMENTS)
+Replace a “card” with one of these:
+- Section header + hairline divider + content block (unboxed)
+- Row list with hover fill (no outer box)
+- “Inset rule” callout: left border line + tiny tint (not a rounded card)
+- Two-column layout with a thin vertical divider (instead of two boxed columns)
+- Sticky aside that is text-only, separated by spacing (not a card stack)
+- Inline chips/tags (minimal, token-driven, no chip soup)
+
+2.4 RIGHT RAIL / SIDEBAR ON LIGHT CONTENT (HARD BAN)
+This is the #1 “looks AI” zone.
+
+Sidebar modules MUST be:
+- heading + short list (bullets or simple rows)
+- separated by whitespace and a top divider rule
+- NO rounded rectangles, NO shadow, NO “panel background”
+- Optional: ONE subtle vertical divider separating main column and aside
+
+Layout recipe:
+- aside column: left padding + (optional) 1px divider on the left
+- each module: h3 + list; keep it short; no decorative backgrounds
+
+Mobile:
+- aside becomes inline sections after the article OR collapsible TOC
+- still no cards
+
+2.5 CONTENT PAGES: “NO CONTAINER TEXT” RULE (HARD)
+For news/docs:
+- The main text column MUST sit on the page background (or an extremely subtle canvas),
+  not inside a big rounded “content card”.
+- Use readable width, spacing, typographic hierarchy, and minimal rules.
+
+2.6 DASHBOARDS: “ONE SURFACE” RULE (HARD)
+If a dashboard needs surfaces:
+- Use at most ONE distinct surface region (e.g., sidebar) + main canvas.
+- Avoid: every widget in its own card.
+- Prefer: tables/rows, inline separators, and one details panel.
+
+2.7 STORE/CATALOG: “ENTITY CARDS ONLY” RULE
+- It’s fine to use cards for game/product tiles in a grid/rail.
+- But the page itself should not become a grid of cards + boxed filters + boxed everything.
+- Filters should be: a left column with text controls + separators, not nested panels.
+
+----------------------------------------------------------------
+3) LAYOUT + RHYTHM
+----------------------------------------------------------------
+3.1 WIDTHS
+- Content pages: comfortable reading width ~680–820px.
+- App pages: use a responsive max-width but allow dense layouts on large screens.
+- Avoid ultra-wide text lines (bad readability).
+
+3.2 SPACING SCALE (TOKENIZED)
+- Choose a single spacing scale (e.g., 4/8/12/16/24/32/48).
+- Do not invent random spacing values.
+- Rhythm matters more than decoration.
+
+3.3 ALIGNMENT DISCIPLINE
+- Use grids. Align edges of headings, cards, tables, and controls.
+- If something feels “off,” it’s usually misalignment, not “needs a box.”
+
+3.4 DIVIDERS (PREFERRED OVER PANELS)
+- Use hairline separators for structure.
+- Keep divider contrast subtle (especially in dark mode).
+- Avoid thick, high-contrast lines.
+
+3.5 STICKY ELEMENTS
+- Sticky headers/sidebars are allowed when they help browsing.
+- Ensure they don’t trap content on small screens.
+
+----------------------------------------------------------------
+4) COLOR SYSTEM (TOKENS ONLY)
+----------------------------------------------------------------
+No improvising colors. Use CSS variables / design tokens.
+
+4.1 SURFACE LADDER (CRITICAL FOR DARK MODE)
+Define surfaces:
+- --bg (page background)
+- --surface-1 (slightly raised, e.g., nav/sidebar)
+- --surface-2 (menus/modals)
+- --surface-3 (popover/tooltip)
+
+Hard rule:
+- Only overlays get real elevation. Content areas stay mostly flat.
+
+4.2 BORDERS / STROKES
+- Prefer strokes over shadows for separation.
+- Strokes must be subtle (low alpha).
+- Do not outline every container.
+
+4.3 SHADOWS
+- Dark mode: shadows must be extremely subtle or avoided.
+- Use shadows mainly for overlays, not for every card.
+- If shadows look like glow: remove them.
+
+4.4 ACCENT COLOR USAGE (MINIMAL)
+- Accent is for: primary action, active state, link hover, selection.
+- If you see accent color “all over”: you overused it.
+- Avoid default bright-blue-on-dark “bootstrap vibe”. Use muted/warmed accents.
+
+4.5 LIGHT THEME SPECIFICS (WHEN USED)
+- Avoid pure white (#fff). Use off-white / very light gray canvas.
+- Avoid pure black for body text; use very dark gray.
+- Use rules and typography for structure, not card backgrounds.
+
+4.6 DARK THEME SPECIFICS (DEFAULT FOR APPS)
+- Use neutral foundations (discord/youtube/warm families).
+- Ensure the surface ladder is readable (subtle steps).
+- Keep text contrast high enough without turning everything into stark white.
+
+4.7 THEME TOGGLING (OPTIONAL, RECOMMENDED WHEN USER MENTIONS)
+- If supporting both themes: implement via CSS variables.
+- Respect prefers-color-scheme optionally.
+- Persist user choice (localStorage).
+
+----------------------------------------------------------------
+5) TYPOGRAPHY + ICONS
+----------------------------------------------------------------
+5.1 FONT STACK
+- Prefer system font stack or a realistic product stack (Inter-like ok, but avoid “obvious Inter template” feel).
+- Use consistent weights: regular for body, medium for UI labels, semibold for headings.
+
+5.2 TYPE SCALE
+- Keep it tight and readable: clear H1/H2/H3 hierarchy.
+- Body line-height ~1.45–1.7 depending on content type.
+- Avoid giant hero headlines unless it’s a content page and it’s editorial.
+
+5.3 MICRO-TYPOGRAPHY
+- Use real punctuation and natural casing.
+- Avoid shouting (ALL CAPS) except small labels.
+- Avoid overly “perfect” copy.
+
+----------------------------------------------------------------
+6) COMPONENT BEHAVIOR (REAL APP FEEL)
+----------------------------------------------------------------
+6.1 NAVIGATION
+- Real app structure by default (not landing page).
+- Active states visible.
+- If a nav section is empty: provide empty state content, not a blank page.
+
+6.2 BUTTONS / LINKS (SEMANTICS)
+- Buttons perform actions; links navigate.
+- Icon-only buttons MUST have aria-label and usually a tooltip.
+- Hover/focus: clear but not bouncy.
+
+6.3 FILTERS / SORTING (CATALOG)
+- Filters must update results statefully.
+- Provide “clear filters”.
+- Show result count and/or applied filter chips (but avoid chip soup).
+
+6.4 LISTS / TABLES
+- Prefer row lists over boxed cards.
+- Hover: subtle row fill + cursor change.
+- Selection states clear.
+
+6.4.1 DATA TABLE / LIST MECHANICS
+- Header row is sticky when the table body scrolls.
+- Alignment rules:
+  - text left
+  - numbers right (tabular figures if available)
+  - dates right or centered (pick one and stay consistent)
+  - actions column right
+- Sorting:
+  - show sort affordance on hover/focus
+  - indicate active sort (icon + direction)
+  - do not “fake sort” visuals without wiring
+- Density:
+  - consistent row height (no random row padding changes)
+  - ROW SIZING (RECOMMENDED):
+    - Compact: 32–36px row height, 8–10px vertical padding total
+    - Comfortable: 40–44px row height, 12–14px vertical padding total
+    - Airy: 48–56px row height, 16–20px vertical padding total
+  - truncate long cells with ellipsis; show full value on hover via tooltip only when needed
+- Large datasets:
+  - use pagination or infinite scroll with clear “loading more”
+  - show total count or “showing X of Y” when known
+
+6.4.2 COLUMN WIDTH + TRUNCATION
+- Critical text columns (like Subject/Title) MUST have a min-width (e.g. 260–360px).
+- Use: overflow:hidden; text-overflow:ellipsis; white-space:nowrap for single-line rows.
+- If multi-line preview is used: clamp to 2 lines (line-clamp) and NEVER allow per-letter wrapping.
+- Never allow flex/grid to shrink important text columns below min-width just to fit action buttons.
+
+6.5 MODALS / DRAWERS
+- Must trap focus, close on ESC, close button visible, clicking backdrop closes (unless destructive).
+- Do not overuse blur glass effects.
+
+6.6 TOASTS / NOTICES
+- Short, informative, dismissible or auto-dismiss (with reduced motion respected).
+- Do not stack a hundred.
+
+6.7 EMPTY / LOADING / ERROR STATES (REQUIRED)
+- Always implement:
+  - loading skeletons or spinner with label
+  - empty state (helpful copy + next step)
+  - error state with retry
+
+6.8 RAILS / CAROUSELS (HARD)
+- Never auto-play scroll.
+- Provide arrow controls on desktop in addition to wheel/trackpad + touch swipe.
+- Arrow controls keyboard-focusable and visible on focus.
+- Hint scrollability by showing partial next item.
+- Keep card layouts aligned within a rail.
+
+----------------------------------------------------------------
+7) MOTION / ANIMATION
+----------------------------------------------------------------
+Motion should be subtle and functional.
+- Avoid bouncy, springy “showcase” animations.
+- Use short fades, small slides, gentle scale (tiny).
+- Keep durations consistent (e.g., 120–220ms for UI transitions).
+
+Reduced motion:
+- If prefers-reduced-motion: reduce or remove non-essential motion.
+
+Animate:
+- hover states (small)
+- opening/closing menus/modals (small)
+- loading skeleton shimmer (optional, subtle)
+Do NOT animate:
+- large layout shifts
+- constantly pulsing UI
+- huge parallax hero effects
+
+----------------------------------------------------------------
+8) CONTENT REALISM + MICROCOPY
+----------------------------------------------------------------
+- Use realistic data variability: long/short titles, missing images, inconsistent ratings, odd categories.
+- Avoid placeholder copy (“Lorem ipsum”, “Amazing product”, “Next-gen solution”).
+- Provide “why” in the content only when editorially relevant, not marketing fluff.
+
+Microcopy rules:
+- Short, specific, calm.
+- Prefer: “Try again”, “No results”, “Clear filters”.
+- Avoid: “Unlock”, “Revolutionary”, “Boost your productivity”.
+
+----------------------------------------------------------------
+9) ACCESSIBILITY (MINIMUM BAR)
+----------------------------------------------------------------
+- Semantic HTML: nav, main, aside, header, footer, section.
+- Skip-to-content on content-heavy pages.
+- Focus outlines: never remove without replacing.
+- Touch / click targets are not tiny:
+  - Minimum 24x24 CSS px (or equivalent padding/spacing)
+  - On mobile, prefer ~44px-tall targets for primary controls
+- ARIA only where needed (icon buttons, custom controls).
+- Alt text for meaningful images; empty alt for decorative images.
+- Keyboard-friendly carousels/rails and filter controls.
+
+----------------------------------------------------------------
+10) STATE + ROUTING REALISM
+----------------------------------------------------------------
+- State-driven UI. If something changes, it’s reflected everywhere consistently.
+- No console errors.
+- File structure clean and predictable.
+- Avoid mega JS files; keep modules logical (data, UI, state, utils).
+
+Routing:
+- If multi-page: real pages or hash routing.
+- If single-page: maintain state and restore on back/forward where reasonable.
+
+Persistence (optional but realistic):
+- Use localStorage for theme, last filters, and simple user choices.
+
+----------------------------------------------------------------
+11) PAGE RECIPES (REFERENCE)
+----------------------------------------------------------------
+A) NEWS / ARTICLE PAGE (NO BOXES)
+- Top nav + search
+- Main column: title, dek, author row, hero image, article body
+- Aside: unboxed modules separated by whitespace + divider rules
+- “What this means” as inset rule callout (left border), not a card
+- Related: link list or minimal thumbnails, not boxed panels
+
+B) STORE HOME
+- One hero or featured rail (not both huge)
+- Rails: consistent entity cards
+- Sections are unboxed: header + rail (no big panels around them)
+
+C) BROWSE / CATALOG
+- Filters: left column with separators (no nested panels)
+- Results: grid/list; entity cards ok
+- Sorting: simple dropdown
+- Applied filters: small chips (limit count)
+
+D) TOOL DASHBOARD
+- Sidebar + list/table + details panel
+- Use vertical divider; avoid multi-card widgets
+- Use 1–2 surfaces max
+
+----------------------------------------------------------------
+12) FAIL CONDITIONS (FAST CHECKS)
+----------------------------------------------------------------
+- Anything looks clickable but does nothing? FAIL.
+- Right rail card stack on light page? FAIL.
+- More than ~2 non-essential containers? FAIL.
+- Filters/sorts/toggles visibly update state? FAIL.
+- Keyboard: reach everything, ESC closes overlays? FAIL.
+- Reduced motion supported? FAIL.
+- 100%/110% screenshot still feels template? Simplify again.
+
+END OF KEY.
+
+
+APPENDIX — TXT KEY HIGH-SIGNAL SNIPPETS (NO DUPES)
+=================================================
+These are included to preserve unique, practical details from the TXT key (palette families,
+token mapping reminders, component realism checks). If a snippet conflicts with the HARD rules
+above (especially Anti-Box), the HARD rules win.
+
+
+[COLOR SYSTEM + SURFACE LADDER]
+3) COLOR SYSTEM (REFERENCE PALETTES + SURFACE LADDER)
+Hard rules:
+- No pure black (#000) backgrounds and no pure white (#fff) text by default.
+- Neutrals must be slightly tinted (cool OR warm), not dead grey.
+- Depth comes from surface steps + subtle overlays, not glow.
+
+3.1 Pick ONE palette family (do not mix families)
+FAMILY A — DISCORD-STYLE COOL NEUTRAL (safe default)
+- bg:       #1e1f22
+- sidebar:  #2b2d31
+- surface:  #313338
+- hover:    #383a40
+- hover2:   #3d3e45
+- text:     #dbdee1
+- muted:    #b5bac1
+
+FAMILY B — YOUTUBE-STYLE DEEP DARK (content-forward)
+- bg:       #0f0f0f
+- surface:  #181818
+- surface2: #212121
+- divider:  #2a2a2a (do NOT use #3d3d3d everywhere; lower it)
+- text:     #ededed (not pure white)
+- muted:    #aaaaaa
+
+FAMILY C — WARM NEUTRAL (human/cozy, chess-like)
+- bg:       #2c2b29
+- surface:  #343231 (derive: +~6-10 brightness)
+- surface2: #3c3a39 (derive)
+- text:     #f0f0ee (warm off-white)
+- muted:    #bcb8b0
+- accent (rare): #4e7837 (and optionally lighter #69923e)
+
+3.2 Surface ladder (mandatory in all families)
+Define tokens:
+- --bg
+- --sidebar
+- --surface
+- --surface2 (headers / subtle contrast)
+- --raised (menus/modals)
+- --hover, --active
+- --stroke (borders)
+- --text, --muted, --faint
+Never invent random one-off greys outside tokens.
+
+3.3 Borders / strokes (felt, not seen)
+- Use low-alpha strokes for structure.
+- If a border is visible at a glance, it’s too strong.
+- Prefer inset strokes on surfaces.
+
+3.4 Elevation without glow (recommended)
+Raised surfaces should be slightly lighter than base surface.
+Do it by:
+- using a lighter surface step OR
+- compositing a subtle white overlay (very low alpha)
+Avoid big drop shadows.
+
+3.5 Accent discipline (optional)
+Default: neutral-only.
+If accent is needed:
+- use it sparingly (underline, small indicator, link hover)
+- never color-wash the whole UI
+- avoid “default blue theme” vibes
+
+
+3.6 THEME PROFILES (DARK DEFAULT, LIGHT OPTIONAL)
+This key defaults to DARK (layered greys). If the user asks for a white/light UI (e.g. app-store look like Google Play), switch to LIGHT profile below.
+
+THEME IMPLEMENTATION
+- Use semantic tokens (CSS variables) for ALL surfaces and text.
+  Example tokens:
+  --bg, --sidebar, --surface-1, --surface-2, --stroke, --text, --muted, --accent, --accent-weak
+- Never hardcode hex colors in components except inside the theme token map.
+- If both themes are supported:
+  - Provide a theme toggle OR follow prefers-color-scheme.
+  - Persist choice (localStorage).
+
+LIGHT PROFILE (WHITE UI RULES)
+Hard rules:
+- Avoid pure white (#fff) as the global page background. Use a near-white instead.
+- Primary text MUST be near-black, not grey-on-grey.
+- Structure comes from spacing + subtle strokes, not “card soup”.
+
+Suggested light tokens (safe default):
+- bg:        #f6f7f8   (page background)
+- sidebar:   #ffffff
+- surface-1: #ffffff   (cards/panels)
+- surface-2: #f1f3f5   (soft sections / hover)
+- stroke:    rgba(10, 12, 16, 0.10)  (dividers)
+- text:      #0f1216
+- muted:     rgba(15, 18, 22, 0.70)
+- accent:    #1a73e8   (or user brand)
+- accent-weak: rgba(26, 115, 232, 0.16)
+
+Light UI interaction states (mandatory):
+- Hover = subtle fill OR underline (not big shadows, not scale-up).
+- Selected rows = light fill + left indicator OR checkmark (never heavy borders).
+- Focus ring must be clearly visible (meet contrast; do not remove outlines).
+
+Image-on-light safety:
+- Any image/logo on white MUST have either:
+  - a soft background tile, OR
+  - a 1px low-alpha border,
+  so it doesn't disappear into the surface.
+
+DARK PROFILE NOTE
+- Keep the existing dark palette rules; do not mix dark + light tokens in one view.
+
+
+[TYPOGRAPHY + ICONS]
+4) TYPOGRAPHY + ICONS (ANTI-AI / REAL PRODUCT TYPE)
+Goal: Avoid the “every AI website uses the same font” vibe. Typography should feel chosen, not default.
+
+4.1 Font strategy (pick deliberately)
+- Pick ONE primary UI family for the whole app.
+- Optional: pick ONE display family for headings only (sparingly).
+- Pick ONE mono family for code/numbers (tables, logs).
+- Don’t mix 3–4 random fonts. If it feels “designed”, it’s too much.
+
+4.2 Default behavior (safe)
+FONT RULES
+- Do NOT ship with “browser default” fonts (no unconfigured default stacks).
+- The project MUST explicitly set a font-family stack for UI + mono.
+- Approved UI fonts (pick ONE):
+  - Inter (preferred default)
+  - System-native stack (system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji")
+  - One of the defined Font Packs in 4.3 (A–E)
+- If using a non-system font:
+  - Load it responsibly (no FOIT, limit weights, good fallbacks, avoid layout shift).
+  - Preload at most ONE primary font file (variable or regular). Do NOT preload every weight.
+- If the app feels “too Inter / too AI”: switch to one of the packs below.
+
+4.3 “Font packs” (FREE / SAFE / HUMAN-LOOKING)
+Choose ONE pack per project unless user explicitly overrides.
+
+PACK A — SYSTEM-NATIVE (most human; least “template”)
+Use when: you want it to feel like a real OS app and avoid web-template vibes.
+- UI stack: system-ui / -apple-system / Segoe UI / etc. (see Primer-style system stacks)
+- Code: ui-monospace stack
+Notes:
+- Great for tools, dashboards, internal UIs.
+- Best performance: no font downloads.
+
+PACK B — DEV TOOL / ENGINEERING (VS Code-ish, sharp, utilitarian)
+Use when: editor, console, project manager, power user app.
+- UI: Geist (Vercel) OR IBM Plex Sans OR Source Sans 3
+- Code: JetBrains Mono OR IBM Plex Mono (match the family if possible)
+Notes:
+- These look “designed by a product team”, not a template.
+
+PACK C — GOOGLE/CONTENT (clean, familiar, readable)
+Use when: content-heavy, media, feeds, video/music UI, search-heavy.
+- UI: Roboto OR Google Sans
+- Code: Roboto Mono OR a matching mono
+
+PACK D — WARM / COZY / CHESS-LIKE (more human)
+Use when: community, hobby tools, “cozy dark” apps, less corporate feel.
+- UI: Atkinson Hyperlegible (accessibility-first) OR Noto Sans
+Notes:
+- Use Atkinson when readability/legibility matters. It has very distinct shapes.
+
+PACK E — MODERN/CRAFTED (subtle personality without going “startup landing”)
+Use when: you want a bit of character but still minimal.
+- UI: Manrope OR Work Sans OR Space Grotesk (careful: Space Grotesk is best for headings)
+- Code: JetBrains Mono / ui-monospace stack
+
+4.5 Type sizing + hierarchy (minimal but real)
+- Body: 14–16px.
+- Labels: 12–13px, 600 weight.
+- Titles: 18–28px, 600–650 default. 700 sparingly.
+- Line-height: 1.35–1.6.
+
+4.6 Icons
+- Monochrome SVG icons.
+- No giant decorative icons.
+- Use one icon style set (stroke weight and corner style consistent).
+- Icon-only buttons MUST have:
+  - an accessible label (aria-label)
+  - a tooltip on hover/focus (short and helpful)
+
+------------------------------------------------------------
+
+[COMPONENT + PATTERN LIBRARY]
+5) COMPONENT + PATTERN LIBRARY (WHAT LOOKS REAL)
+5.1 Navigation (sidebar)
+Preferred:
+- Row items (icon + label)
+- Hover: subtle fill
+- Active: slightly stronger fill
+- Optional: compact mode (icons-only) + expand button
+
+Sidebar behavior (modern app feel):
+- Collapsible with a clear chevron/hamburger.
+- Resizable via drag handle (subtle, only appears on hover near edge).
+- On mobile: becomes a drawer.
+
+APP ICON + FAVICON
+- The app mark MUST be used anywhere a “logo slot” exists (sidebar header, login header, empty state brand tile).
+- The brand area MUST use a real app mark (SVG preferred) if it shows any icon at all.
+- Do NOT use a generic placeholder square/circle as the “logo”.
+- If the user did not provide a brand icon:
+  - generate a simple geometric SVG mark or monogram that matches the app name
+  - keep it monochrome and consistent with the icon set
+- App icon + favicon MUST exist and be wired (brand area + <head> metadata).
+
+BRAND AREA RULE (TOP-LEFT)
+The sidebar header/brand area may contain ONLY:
+- empty space, OR
+- logo only, OR
+- name only, OR
+- logo + name
+No taglines, subtitles, extra status text, version labels, or descriptive copy in that area.
+
+5.2 Tabs / view switching
+Avoid segmented pill navigation by default.
+Use:
+A) Underline tabs (text-only, active underline)
+B) Simple list nav (chat-like)
+Only use segmented controls for true mode toggles.
+
+5.3 Buttons
+Default buttons are text-like:
+- transparent
+- hover: subtle fill
+- active: slightly stronger
+Primary button only if the page has a true primary action (one per view).
+
+BUTTONS VS LINKS
+- Use links for navigation and external URLs. Use buttons for in-place actions.
+
+5.5 Lists/tables (big “real app” signal)
+- Rows with hover fill (minimal gridlines).
+- Selected state stronger than hover.
+- Secondary actions appear on hover OR on selection (not always visible).
+
+5.6 Inspector / details panel (right side)
+- Shows details for current selection.
+- If nothing selected: show a calm placeholder + 1 action suggestion.
+- Panel can be collapsed.
+- If the panel is optional, keep it hidden until an item is selected.
+
+5.7 Empty states (non-cute, functional)
+- 1 line describing what’s missing
+- 1 primary action (e.g., “Import…”, “Create…”)
+No illustrations unless user asked.
+
+5.7.1 EMPTY STATE TYPOGRAPHY + LAYOUT
+Empty states MUST be visually designed, not raw paragraphs.
+
+Rules:
+- Use a max width (about 42–56ch) and align to the same left gutter as list rows.
+- Title line: 14–16px, 600 max. Body: 13–14px, muted.
+- Use 1–2 lines only. If longer, split into title + one sentence.
+- Provide ONE primary action button/link when relevant.
+- Do NOT leave empty-state text floating in a huge blank area; add calm spacing and a small header row if needed.
+- In light mode, empty-state text must not be low-contrast grey-on-white.
+
+------------------------------------------------------------
+
+[MOTION / ANIMATION]
+6) MOTION / ANIMATION (OPTIONAL BUT CAN MAKE IT FEEL HUMAN)
+Default: minimal. Motion must communicate state or spatial change.
+- Respect prefers-reduced-motion.
+- Avoid bouncy springs unless explicitly playful.
+- Animate transform/opacity; avoid layout thrash.
+- Keep it calm and quick.
+
+------------------------------------------------------------
+
+[DELIVERY STANDARD]
+11) DELIVERY STANDARD (ANTI-PROTOTYPE)
+SHIP MODE
+- The delivered UI must look like a ready public product, not a dev demo.
+- Do NOT include developer-only UI in the product surface:
+  - no “Tools / Diagnostics / Self-Test / Simulate error/loading” buttons
+  - no debug panels, no placeholder dev notes, and no always-visible hint chips (“press / to search”, “Esc clear”, etc.) unless they are part of a dedicated Help surface or a real, user-facing feature.
+- Dev/testing utilities (if they exist at all) must be removed or hidden behind a non-obvious dev flag and MUST be off by default.
+- No dead code, no placeholder “demo” copy.
+- Set real <title>, favicon, and consistent naming.
+- QA utilities may exist only behind ?dev=1 (or similar) and MUST be off by default.
+- Any nav item must route to a unique view OR be removed.
+- If a view is not implemented, hide it (don’t show disabled nav unless there’s a real reason and explanation).
+
+REFRESH / SYNC BUTTON RULE
+- Do NOT add a “Refresh” button unless it triggers a meaningful, user-visible change:
+  - re-fetch data, re-run a sync, or update a “Last updated” timestamp with a visible loading state.
+- If Refresh exists, it MUST:
+  - disable while running
+  - show loading feedback
+  - show “Last updated …” near the control
+- Do NOT include Refresh as a realism prop if the app is purely local/static.
+- “Refresh” MUST NOT only re-render UI; it must change data freshness state (timestamp/loading) at minimum.
+
+KEYBOARD HINT DISCIPLINE
+- Do NOT permanently show keyboard shortcut hints across the main UI.
+- Shortcut education MUST live in ONE of:
+  1) Settings → Shortcuts
+  2) A Help/“?” popover/panel
+  3) A command palette help section
+  4) A first-run tip that is dismissible and stays off by default after dismissal
+- Inline shortcut hints are allowed ONLY inside:
+  - a dedicated Help surface
+  - Settings
+  - a modal/drawer footer for that modal/drawer only
+
+[ENGINEERING]
+7) ENGINEERING (MAKE IT WORK LIKE A REAL APP)
+7.2 State architecture (mandatory)
+Single source of truth for:
+- selectedId
+- activeView
+- search/filter/sort
+- sidebarCollapsed + sidebarWidth
+- panelOpen + panelWidth
+- any “active” concept (nowPlaying, currentItem, etc)
+
+UI derives from state. Never “last click” UI.
+
+7.3 Persistence
+If it improves UX:
+- localStorage for UI state (collapsed, widths, last view)
+- On load: hydrate -> render -> sync highlights
+
+7.4 Event rules
+- Bind events once.
+- Prefer delegation for list rows.
+- Handlers update state -> render minimal areas.
+- After mutations: save() then render().
+
+7.5 Performance rules
+- Avoid layout shift:
+  - reserve space for images/media (width + height or aspect-ratio)
+  - do not insert toolbars/alerts above content after load without reserving space
+- Images:
+  - use WebP/AVIF where possible
+  - responsive sizing (srcset/sizes or equivalent)
+  - lazy-load below-the-fold images; do NOT lazy-load the primary hero/LCP image
+- Fonts:
+  - font-display: swap/optional; avoid FOIT
+  - limit font files; avoid loading many weights
+- Effects:
+  - no heavy blur, no giant shadows, no glow
+  - no backdrop-filter / glass blur by default
+- Lists:
+  - virtualize or paginate large lists (>200 rows/items)
+- Scrolling:
+  - keep scrolling smooth (no expensive scroll handlers)
+- JS/CSS:
+  - avoid mega-dependencies for simple pages
+  - keep transitions to transform/opacity (no layout thrash)
+
+7.6 OVERLAY SAFETY INVARIANT
+Any full-screen overlay container using position: fixed; inset: 0;
+MUST be non-interactive when closed.
+Never rely on opacity alone.
+
+- Also remove closed overlays from the tab order and accessibility tree:
+  - prefer [hidden]{display:none} or inert
+  - if using pointer-events, also set aria-hidden=true while closed
+- Backdrop must never block clicks when the modal/drawer is closed.
+- Keep overlay hosts at the root level, not inside scrolling panes.
+
+7.6.1 DRAWER / MENU CLOSE CONTRACT
+Any drawer/right panel/menu that opens over content MUST be closable via ALL of:
+- Close button
+- Esc key
+- Click outside (backdrop) IF a backdrop exists
+- Toggling the same trigger again
+
+Implementation rules:
+- Use ONE source of truth boolean: isOpen
+- Ensure no “dead overlay” remains after close
+
+7.6.2 Z-INDEX LADDER
+- Define a simple z-index scale (tokens), then never ad-hoc.
+  Example:
+  - base content: 0
+  - sticky header: 10
+  - dropdown/menu: 100
+  - tooltip: 200
+  - drawer/sidepanel overlay: 300
+  - modal: 400
+  - toast host: 500
+- Never allow background tooltips/menus to appear above a modal.
+- Avoid stacking modals. Default rule: only one top-level modal open at once.
+
+7.7 SCROLL CONTAINMENT
+- Use a fixed app shell: header + main area, and make only the main content panes scroll.
+- Sidebar, main content, and inspector panels should scroll independently when needed.
+- Modals/drawers scroll internally (never exceed viewport).
+- Keep scroll regions predictable.
+
+END.
